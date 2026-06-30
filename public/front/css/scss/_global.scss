@@ -1,0 +1,283 @@
+@use "sass:math";
+@use "sass:list";
+
+@function calculateRem($size) {
+    $remSize: '';
+    @if type-of($size)=='list' {
+        $size: list.nth($size, 1);
+        $remSize: #{math.div($size, 16px)}rem !important;
+    }
+    @else {
+        $remSize: #{math.div($size, 16px)}rem;
+    }
+    @return $remSize;
+}
+
+@mixin fontSize($size) {
+    font-size: $size; //Fallback in px
+    font-size: calculateRem($size);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+body {
+    margin: 0;
+    padding: 0;
+    @include fontSize(16px);
+    font-family: 'Poppins', 'sans-serif';
+}
+.text-gray{color:$light-gray;}
+.bg-light-gray{background: $light-gray;}
+input,select,
+.btn,button {
+    &:focus {
+        box-shadow: none !important;
+        outline: none !important;
+        &:not(:focus-visible){
+            box-shadow: none !important;
+            outline: none !important;
+        }
+    }
+    &:not(.collapsed){
+        box-shadow: none !important;
+        outline: none !important;
+    }
+}
+
+a {
+    @include transition(0.4s all ease);
+    text-decoration: none;
+    outline: none;
+}
+
+.form-control ,.form-select{
+    font-family: 'Poppins', sans-serif;
+}
+
+.badge {
+    font-weight: normal;
+}
+
+h1 .h1,h2,.h2, h3,.h3, h4,.h3, h5,.h5, h6,.h6{font-weight: 600;}
+
+a {
+    @include transition(all 0.3s ease);
+    color: $dark;
+    &:hover,
+    &:focus,
+    &:active {
+        color: $primary;
+    }
+}
+
+/***** Button ******/
+.btn {
+    @include transition(all 0.3s ease);
+    @include radius(5px);
+    &:focus,
+    &.focus,
+    &:not(:disabled):not(.disabled):active,
+    &:not(:disabled):not(.disabled).active,
+    &:not(:disabled):not(.disabled):active:focus {
+        @include box-shadow(0, 0, 0, 0, #ffffff);
+    }
+}
+
+.btn-primary,.btn-info,.btn-success,.btn-secondary{
+    color: #fff;
+    @include transition(0.5s all ease);
+    position: relative;
+    overflow: hidden;
+    padding:0.5rem 1.4rem;
+    border: none;
+    z-index: 1;
+    &:after,  &:before{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 100%;
+      background-color: $primary;
+      @include transition(0.5s all ease);
+      z-index: -2;
+    }
+    &:before {
+      content: '';
+      width: 0%;
+      background-color: darken($primary, 10%);
+      z-index: -1;
+    }
+    &:hover,&:active,&:focus {
+      color: #fff !important;
+      &:before {
+        width: 100%;
+      }
+    }
+  }
+
+  .btn-primary{
+    &:after,  &:before{
+      background-color: $primary;
+    }
+    &:before {
+      background-color: darken($primary, 10%);
+    }
+  }
+  .btn-info{
+    &:after,  &:before{
+      background-color: $info;
+    }
+    &:before {
+      background-color: lighten($info, 20%);
+    }
+  }
+  .btn-success{
+    &:after,  &:before{
+      background-color: $success;
+    }
+    &:before {
+      background-color: darken($success, 10%);
+    }
+  }
+  .btn-secondary{
+    &:after,  &:before{
+      background-color: $secondary;
+    }
+    &:before {
+      background-color: darken($secondary, 10%);
+    }
+  }
+
+  .btn-outline-primary, .btn-outline-info, .btn-outline-secondary{
+    &:hover{
+        color:#ffffff;
+    }
+  }
+// Spacing
+.spacing-y{
+    padding:2rem 0rem;
+    @include mq("tablet"){
+        padding:3.5rem 0rem;}
+    }
+
+
+// slick
+.slick-track {
+  display: flex;
+  align-items:center;
+  padding-bottom: 0.8rem;
+}
+
+.slick-btn{
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1px solid $primary;
+  border-radius: 100%;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  left: -40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $primary;
+  z-index: 9;
+  @include transition(0.5s all ease);
+  cursor:pointer;
+  &.prev-arrow{left: 0px;right:Auto; @include mq("large-container"){left: -40px; }}
+  &.next-arrow{left:auto;right: 0px; @include mq("large-container"){ right: -40px;}}
+  &:hover,&:active,&:focus{
+      background:$primary;
+      color:#ffffff;
+  }
+}
+
+// page header
+
+.page-header{
+    position: relative;
+    width: 100%;
+    display: block;
+    padding-bottom:1.4rem;
+    margin-bottom:2.5rem;
+    &:after {
+        content:"";
+        position:absolute;
+        display:block;
+        width: 266px;
+        background: #ccc;
+        height: 2px;
+        left: 0;
+        right: 0;
+        bottom: 0px;
+        margin: 0 auto;
+    }
+    &:before {
+        content:"";
+        position:absolute;
+        display:block;
+        background: #fff;
+        @include radius(50%);
+        border: 5px solid #707070;
+        height: 21px;
+        width: 21px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        bottom: -9px;
+        z-index: 1;
+    }
+    h2{font-family: 'Roboto Slab','sans-serif';}
+}
+
+// Dark Mode
+.dark-switch {
+    .form-switch {
+        background: $primary;
+        @include radius(100%);
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .form-check-input {
+            --bs-form-switch-bg: url("../images/moon.svg");
+            width: 40px;
+            height: 40px;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0,0,0,0);
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            background-size: 55%;
+            background-position: center;
+            cursor: pointer;
+            &:checked {
+                --bs-form-switch-bg: url("../images/sun.svg");
+            }
+        }
+    }
+}
+
+
+.fancybox__content{
+    @include mq-max("tablet"){width:100% !important;height:100% !important;}
+    img{width:100%;max-width:100%;height:auto;}
+}
+
+.shoppingcart-icon{
+    .badge {
+        @include mq-max("tablet"){
+            position: absolute;
+            top: -8px;
+            right: -4px;
+        }
+    }
+}

@@ -1,0 +1,24 @@
+$primary: #ed2124;
+$secondary:#666666;
+$success:Green;
+$info:#212121;
+$warning:yellow;
+$danger:#f70000;
+$light:#ededed;
+$dark: #333333;
+$light-gray: #f1f1f1;
+// Container
+$container-max-widths: (
+  sm: 100%,
+  md: 100%,
+  lg: 100%,
+  xl: 1320px,
+  xxl: 1650px
+);
+
+
+// Theme variable
+$h1-font-size:  2rem;
+$small-font-size: 0.85rem;
+$rfs-base-font-size: 0.85rem;
+$btn-font-family: "Poppins", sans-serif;

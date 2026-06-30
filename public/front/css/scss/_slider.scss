@@ -1,0 +1,293 @@
+// Vars
+$slick-dot-width: 20px;
+$slick-dot-height: 20px;
+$slick-dot-color: white;
+$slick-dot-color-active: $slick-dot-color;
+$slick-opacity-default: 0.75;
+$slick-opacity-on-hover: 1;
+$slick-opacity-not-active: 0.25;
+
+.banner__slider {
+  .slick-track {
+    height:330px; padding-bottom:0;
+    @include mq("large-container"){
+        height: 500px;
+    }
+  }
+
+  .slide {
+    position: relative;
+    transition: 1s;
+
+    .slide__img {
+      img {
+        opacity: 1 !important;
+        animation-duration: 3s;
+        transition: all 1s ease;
+      }
+    }
+
+    .slide__content {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      @include mq("large-container"){   width: 850px;}
+      width:  600px;
+      height: 100%;
+      margin: auto 0;
+      display: flex;
+      align-items: center;
+
+      &.slide__content__left {
+        left: 0%;
+
+        .slide__content_details {
+          padding: 30px  30px 30px 100px;
+          display: none;
+          @include mq("large-container"){ padding: 40px 40px 40px 260px;}
+        }
+      }
+
+      &.slide__content__right {
+        right: 0%;
+        left: auto;
+
+        .slide__content_details {
+          padding: 30px 100px 30px 30px;
+          @include mq("large-container"){ padding: 40px 260px 40px 40px;}
+        }
+      }
+
+      .slide__content_details {
+        color: #fff;
+        margin: auto;
+        padding: 30px 30px 30px 100px;
+        @include mq("large-container"){ padding: 40px 40px 40px 260px;}
+        width: 100%;
+        background: #ed21244f;
+
+        h2 {
+            @include fontSize(40px);
+            @include mq("large-container"){  @include fontSize(60px);}
+          margin: 10px 0;
+        }
+
+        .animated {
+          transition: all .5s ease;
+        }
+      }
+    }
+  }
+
+  .slick-nav {
+    --active: #fff;
+    --border: rgba(255, 255, 255, .12);
+    width: 35px;
+    height: 35px;
+    @include mq("tablet"){
+        width: 55px;
+        height: 55px;
+    }
+    position: absolute;
+    @include transition(0.5s all ease);
+    cursor: pointer;
+    top: calc(50% - 44px);
+    margin-right: 0 20px;
+
+    &.prev-arrow {
+      left: 3%;
+      transform: scaleX(-1);
+      z-index: 999;
+    }
+
+    &:hover {
+        width: 35px;
+      height: 35px;
+      @include mq("tablet"){
+        width: 45px;
+        height: 45px;
+      }
+      .long-arrow-right,
+      .long-arrow-left {
+        left: 20px;
+        @include mq("tablet"){
+            left: 50px;
+        }
+      }
+    }
+
+    &.next-arrow {
+      left: auto;
+      right: 3%;
+    }
+
+    i {
+      display: block;
+      position: absolute;
+      margin: -10px 0 0 -10px;
+      width: 20px;
+      height: 20px;
+      left: 50%;
+      top: 50%;
+
+      &:before,
+      &:after {
+        content: '';
+        width: 10px;
+        height: 2px;
+        border-radius: 1px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background: var(--active);
+        margin: -1px 0 0 -5px;
+        display: block;
+        transform-origin: 9px 50%;
+      }
+
+      &:before {
+        transform: rotate(-40deg);
+      }
+
+      &:after {
+        transform: rotate(40deg);
+      }
+    }
+
+    &:before,
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 1px;
+      right: 1px;
+      top: 1px;
+      bottom: 1px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+    }
+
+    svg {
+      width: 35px;
+      height: 35px;
+      @include mq("tablet"){
+        width: 44px;
+        height: 44px;
+      }
+      display: block;
+      position: relative;
+      z-index: 1;
+      color: var(--active);
+      stroke-width: 2px;
+      stroke-dashoffset: 126;
+      stroke-dasharray: 126 126 0;
+      transform: rotate(0deg);
+    }
+
+  }
+
+  .long-arrow-right,
+  .long-arrow-left {
+    @include transition(0.5s all ease);
+    display: block;
+    width: 9px;
+    height: 9px;
+    left: 10px;
+    @include mq("tablet"){
+        width: 13px;
+        height: 13px;
+        left: 20px;
+    }
+    border-top: 2px solid #fff;
+    border-left: 2px solid #fff;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    cursor: pointer;
+  }
+
+  .long-arrow-left {
+    transform: rotate(-225deg);
+
+    &:after {
+      content: "";
+      display: block;
+      width: 2px;
+      height: 45px;
+      background-color: #fff;
+      ;
+      transform: rotate(-45deg) translate(15px, 4px);
+      left: 0;
+      top: 0;
+    }
+  }
+
+  .long-arrow-right {
+    transform: rotate(135deg);
+
+    &:after {
+      content: "";
+      display: block;
+      width: 2px;
+      height: 45px;
+      background-color: #fff;
+      transform: rotate(-45deg) translate(15px, 4px);
+      left: 0;
+      top: 0;
+    }
+  }
+
+}
+
+
+// Change animation presets
+.slider [data-animation-in] {
+  opacity: 0;
+  animation-duration: 1.5s;
+  transition: opacity 0.5s ease 0.3s;
+  transition: 1s;
+}
+
+
+
+/* /////////// IMAGE ZOOM /////////// */
+@keyframes zoomInImage {
+  from {
+    transform: scale3d(1, 1, 1);
+    transition: 1s all linear;
+  }
+
+  to {
+    transform: scale3d(1.1, 1.1, 1.1);
+    transition: 1s all linear;
+  }
+}
+
+.zoomInImage {
+  animation-name: zoomInImage;
+}
+
+@keyframes zoomInImage {
+  0% {
+    transform: scale3d(1, 1, 1);
+    transition: 1s all linear;
+  }
+
+  50% {
+    transform: scale3d(1.1, 1.1, 1.1);
+    transition: 1s all linear;
+  }
+
+  100% {
+    transform: scale3d(1, 1, 1);
+    transition: 1s all linear;
+  }
+}
+
+.zoomOutImage {
+  animation-name: zoomOutImage;
+  transition: 1s;
+}

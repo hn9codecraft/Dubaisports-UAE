@@ -1,0 +1,198 @@
+// Top Header css
+#header{
+    &.sticky-header{
+        @include box-shadow(0px,2px,7px,-1px,#979797);
+
+    }
+    .top-header{
+        @include mq("desktop"){padding:2rem 1rem;}
+        @include mq("large-container"){padding:2rem 3rem;}
+        .search-bar{
+            .form-control{
+                width:860px;height:40px;
+                @include mq("desktop"){width:350px;}
+                @include mq("desktop-wide"){width:410px;}
+                @include mq("large-container"){width:650px;}
+                @include radius(5px 0px 0px 5px);
+                background:transparent;
+                box-shadow:inset 0px 0px 7px -5px #2a2a2a;
+            }
+            .btn-primary{@include radius(0px 5px 5px 0px);
+                .custom-icon{
+                    .path2{
+                        &:before{color:#ffffff;}
+                    }
+                }
+            }
+            .search-item{z-index:99;@include radius(0px 0px 5px 5px);
+                box-shadow: 0px 2px 7px -1px #979797;
+                @include mq("tablet"){max-width:700px;}
+                ul{
+                    li{
+                        a{
+                            padding:0.2rem 0rem;
+                            display:inline-block;
+                        }
+                    }
+                }
+            }
+        }
+        .site-logo{
+            img{ width: 260px;
+                @include mq("desktop"){width: 200px;}
+                @include mq("large-container"){width: 300px;height: 50px;}
+            }
+        }
+        .user-link{
+            li{
+                a{
+                    @include fontSize(15px);
+                    padding:0.1rem 1rem;
+                    align-items: center;
+                    line-height:17px;
+                    @include mq("desktop"){line-height:15px;@include fontSize(13px);}
+                    @include mq("large-container"){line-height:17px;@include fontSize(15px);}
+                    .custom-icon,svg{@include fontSize(20px);
+                        @include mq("desktop"){@include fontSize(18px);}
+                        @include mq("large-container"){@include fontSize(20px);}
+                        .path1,.path2{
+                            &:before{@include transition(0.5s all ease);}
+                        }
+                    }
+                    &:hover,&:active,&:focus{
+                        .custom-icon{
+                            .path1{
+                                &:before{color:$info;}
+                            }
+                        }
+                    }
+                    .cart-badge{
+                        @include fontSize(11px);
+                    }
+                }
+                &:first-child{
+                    a{padding-left:0;}
+                }
+            }
+        }
+    }
+}
+
+// Navbar
+nav{
+    .navbar-nav{
+        > .nav-item{margin-right:0.4rem;
+            .nav-link{
+                display: inline-block;
+                position: relative;
+                padding: 0.8rem 1rem;
+                color:#333333;
+                text-transform: capitalize;
+                @include transition(0.5s color);
+                font-weight:600;
+                @include mq("desktop"){padding: 0.8rem 0.2rem;@include fontSize(13px);}
+                @include mq("desktop-wide"){padding: 0.8rem 0.4rem;@include fontSize(13px);}
+                @include mq("large-container"){ padding: 0.8rem 1rem;@include fontSize(17px);}
+                &:before{
+                    content: '';
+                    display: block;
+                    position:absolute;
+                    bottom:0;
+                    left:0;
+                    width: 0;
+                    height: 2px;
+                    background: $primary;
+                    transition: width .3s;
+                }
+                &:after{
+                    content:"";
+                    display:block;
+                    opacity:0;
+                    position:absolute;
+                    border-bottom: 8px solid $primary;
+                    border-right: 8px solid transparent;
+                    border-left: 8px solid transparent;
+                    left:0;
+                    width:17px;
+                    right: 0;
+                    bottom:0;
+                    margin:auto;
+                    transition: width 1s;
+                }
+                &:hover,&:focus,&:active,&.active,&.show{color:$primary;
+                    &:before{
+                        width: 100%;
+                        transition: width .3s;
+                    }
+                }
+                &.active{
+                    &:after{
+                        opacity:1;
+                    }
+                }
+            }
+            .dropdown-menu{
+                width:100%;border:none;@include radius(0);margin-top: 0;padding:0rem;@include box-shadow(0px, 4px, 6px, 0px, #7171718c);left:0;right:0;top:100%;opacity:0;visibility:hidden;
+                @include mq("tablet"){display:inline-block !important;}
+                .dropdown-item{
+                  padding: 0rem;@include radius(6px);background: #f9f9f9;
+                    img{width: 250px;height:250px;object-fit:contain;margin:auto;@include radius(6px 6px 0px 0px);}
+                    span{@include radius(0px 0px 6px 6px);}
+                    &:hover,&:focus,&:active,&.active,&.show{
+                        > span{
+                            color:$primary;}
+                        }
+                }
+                .row {
+                    .col-md-auto{
+                     @include mq("tablet"){
+                         padding:2rem 1rem;
+                     }
+                    }
+                }
+            }
+            &:hover{
+                .dropdown-menu{display: block !important;opacity:1;visibility: visible;@include transition(0.4s all ease);
+                    &.show{display: block !important;opacity:1;visibility: visible;}
+                }
+            }
+            .btn{@include radius(5px 5px 0px 0px);}
+        }
+    }
+}
+.all_product{
+   > li{
+        &:first-child, &:last-child{
+            display: none;
+        }
+        a{
+            padding:0.5rem 1rem;
+            border-bottom:1px solid #d5d5d5;
+            &:hover,&:active,&:focus{
+                color:$primary;
+            }
+        }
+        > ul{
+            @include transform(none !important);
+        }
+    }
+}
+// services
+.services{ border-color: #d5d5d5 !important;
+    h5{display:none;}
+    ul{
+        li{
+            @include mq('desktop'){  width: auto;flex: 0 0 auto;margin-top: 0rem;justify-content: start}
+            width: 50%;flex: 0 0 50%;margin-top: 1rem;justify-content: center;
+        }
+    }
+    .service-icon{
+        .custom-icon {
+            color:$primary;
+            @include fontSize(30px);
+            &.custom-secure-shopping{@include fontSize(38px);}
+            &.custom-free-installation{@include fontSize(39px);}
+            &.custom-product-warranty{@include fontSize(38px);}
+        }
+    }
+}
