@@ -36,6 +36,15 @@ class ProductJob
             $this->data['status'] = '0';
         }
 
+        $this->data['best_seller'] = !empty($this->data['best_seller']) ? '1' : '0';
+        $this->data['popular_product'] = !empty($this->data['popular_product']) ? '1' : '0';
+        $this->data['combo_offer'] = !empty($this->data['combo_offer']) ? '1' : '0';
+        $this->data['clearance_sale'] = !empty($this->data['clearance_sale']) ? '1' : '0';
+
+        if (empty($this->data['brand_id'])) {
+            $this->data['brand_id'] = null;
+        }
+
         $data = Product::firstOrNew(['id' => $this->data['id']]);
 
         $oldMainImage = $data['main_image'];

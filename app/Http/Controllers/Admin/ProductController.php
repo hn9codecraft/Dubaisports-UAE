@@ -75,7 +75,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.product.create');
+        $brands = \App\Models\Brand::where('status', '1')->pluck('name', 'id')->toArray();
+        return view('admin.product.create', compact('brands'));
     }
 
     /**
@@ -123,7 +124,8 @@ class ProductController extends Controller
         if(!empty($data['other_images'])) {
             $data['other_images'] = json_decode($data['other_images']);
         }
-        return view('admin.product.edit', compact('data'));
+        $brands = \App\Models\Brand::where('status', '1')->pluck('name', 'id')->toArray();
+        return view('admin.product.edit', compact('data', 'brands'));
     }
 
     /**

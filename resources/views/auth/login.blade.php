@@ -94,6 +94,16 @@
                 </span>
             @enderror
           </div>
+          @if(env('RECAPTCHA_SITE_KEY'))
+              <div class="d-flex justify-content-center mb-3">
+                  <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+              </div>
+              @error('g-recaptcha-response')
+                  <div class="text-danger mb-3">
+                      <strong>{{ $message }}</strong>
+                  </div>
+              @enderror
+          @endif
           <button type="submit" class="btn btn-info mt-3 px-4">Login </button>
           <a href="{{ route('password.request') }}" class="btn btn-link d-block text-center mb-2">Forget Password</a>
         </form>
@@ -109,4 +119,10 @@
       </div>
     </div>
   </div>
+@endsection
+
+@section('js')
+    @if(env('RECAPTCHA_SITE_KEY'))
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
 @endsection

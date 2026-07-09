@@ -101,7 +101,7 @@ class CheckoutController extends Controller
                 $validated = $request->validate([
                     'address_line_1' => 'required|max:50',
                     'country_id' => 'required',
-                    // 'state_id' => 'required',
+                    'state_id' => 'required',
                     'city' => 'required',
                 ]);
             }
@@ -389,7 +389,7 @@ class CheckoutController extends Controller
                         'address_line_1' => !empty($data['address_line_1']) ? : "",
                         'address_line_2' => !empty($data['address_line_2']) ? : "",
                         'country_id' => $data['country_id'],
-                        // 'state_id' => $data['state_id'],
+                        'state_id' => $data['state_id'],
                         'city' => $data['city'],
                     ]),
                     'delivery_charge' => $data['delivery_charge'],

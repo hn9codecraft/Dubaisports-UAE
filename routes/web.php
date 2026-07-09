@@ -31,6 +31,8 @@ Route::group(['as' => 'front.', 'namespace' => 'Front',  'middleware' => []], fu
     Route::post('/quote', 'CMSPageController@storeQuoteForm')->name('quote.store');
 
     Route::post('products/delete', 'ProductController@delete')->name('products.delete');
+    Route::get('/combo-offers', 'ProductController@comboOffers')->name('combo-offers');
+    Route::get('/clearance-sale', 'ProductController@clearanceSale')->name('clearance-sale');
     Route::resource('/products', 'ProductController');
     Route::get('/{category_group_slug}/{category_slug}', 'ProductController@index')->name('category.products');
 

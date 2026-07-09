@@ -89,6 +89,24 @@
 <div class="product-list spacing-y" id="#product-list">
     <div class="container">
         <div class="page-header">
+            <h2 class="mb-0 text-center">Combo <span class="text-primary">Offers</span></h2>
+        </div>
+        <livewire:front.home-product-list :type="'combo_offer'"/>
+    </div>
+</div>
+
+<div class="product-list bg-light spacing-y" id="#product-list">
+    <div class="container">
+        <div class="page-header">
+            <h2 class="mb-0 text-center">Clearance <span class="text-primary">Sale</span></h2>
+        </div>
+        <livewire:front.home-product-list :type="'clearance_sale'"/>
+    </div>
+</div>
+
+<div class="product-list spacing-y" id="#product-list">
+    <div class="container">
+        <div class="page-header">
             <h2 class="mb-0 text-center">New <span class="text-primary">Listing</span></h2>
         </div>
         <livewire:front.home-product-list :type="'new'"/>

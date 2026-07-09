@@ -60,6 +60,9 @@ Route::group(['as' => 'admin.'], function () {
 		Route::post('banners/delete', 'BannerController@delete')->name('banners.delete');
 		Route::resource('/banners', 'BannerController');
 
+		Route::post('brands/delete', 'BrandController@delete')->name('brands.delete');
+		Route::resource('/brands', 'BrandController');
+
 		Route::post('coupons/delete', 'CouponController@delete')->name('coupons.delete');
 		Route::resource('/coupons', 'CouponController');
 

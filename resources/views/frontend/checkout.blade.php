@@ -82,22 +82,22 @@
                                     </span>
                                     @enderror
                                 </div>
-                                <!-- <div class="col-md-6">
+                                <div class="col-md-6">
                                     <div class="d-flex form-group mb-4 position-relative">
                                         <span class="square-icon"><i class="fa-solid fa-location-dot"></i></span>
-                                        <select name="state_id" id="state_id" class="form-select" value="{{ old('state_id') }}" aria-label="Default select example" @error('state_id') autofocus @enderror>
-                                            <option selected>Select State</option>
+                                        <select required name="state_id" id="state_id" class="form-select" aria-label="Default select example" @error('state_id') autofocus @enderror>
+                                            <option value="" selected disabled>Select State</option>
                                             @foreach($states as $state)
-                                                <option class="d-none" data-country="{{ $state['country_id'] }}" value="{{ $state['id'] }}" data-deliveryCharge="{{ $state['delivery_charge'] }}">{{ $state['name'] }}</option>
+                                                <option class="d-none" data-country="{{ $state['country_id'] }}" value="{{ $state['id'] }}" data-deliveryCharge="{{ $state['delivery_charge'] }}" {{ old('state_id') == $state['id'] ? 'selected' : '' }}>{{ $state['name'] }}</option>
                                             @endforeach
-                                            </select>
+                                        </select>
                                     </div>
                                     @error('state_id')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
-                                </div> -->
+                                </div>
                                 <div class="col-md-6">
                                     <div class="d-flex form-group mb-4 position-relative">
                                         <span class="square-icon"><i class="fa-solid fa-location-dot"></i></span>

@@ -30,6 +30,7 @@
 	                  <th>First Name</th>
 	                  <th>Last Name</th>
 					  <th>Email</th>
+					  <th>Wishlist</th>
 	                  <th>Status</th>
 	                  <th>Action</th>
 	                </tr>
@@ -41,6 +42,7 @@
 	                  <th>First Name</th>
 	                  <th>Last Name</th>
 					  <th>Email</th>
+					  <th>Wishlist</th>
 	                  <th>Status</th>
 	                  <th>Action</th>
 	                </tr>
@@ -124,6 +126,23 @@
 	        { "mData": "first_name",sWidth: "10%",bSortable: true,},
 	        { "mData": "last_name",sWidth: "10%",bSortable: true,},
 	        { "mData": "email",sWidth: "10%",bSortable: true,},
+	        { 
+	            "mData": "wishlist_products",
+	            "sWidth": "10%",
+	            "bSortable": false,
+	            "mRender": function(v, t, o) {
+	                var count = v ? v.length : 0;
+	                if (count > 0) {
+	                    window.userWishlists = window.userWishlists || {};
+	                    window.userWishlists[o.id] = {
+	                        username: (o['first_name'] || '') + ' ' + (o['last_name'] || ''),
+	                        products: v
+	                    };
+	                    return '<button type="button" class="btn btn-xs btn-info btn-flat view-wishlist" data-user-id="' + o.id + '"><i class="fa fa-heart text-danger"></i> View (' + count + ')</button>';
+	                }
+	                return '<span class="text-muted">0 items</span>';
+	            }
+	        },
 	        { "mData": "status",
 				sWidth: "10%",
 				bSortable: false,
@@ -176,5 +195,131 @@
 	    $(this).closest('table').find('tbody tr td:first-child input[type=checkbox]').prop('checked',is_checked);
 	    $(".selectall").prop('checked',is_checked);
 	});
+
+	var currentWishlistProducts = [];
+	var currentWishlistPage = 1;
+	var itemsPerPage = 5;
+
+	function renderWishlistPage(page) {
+	    currentWishlistPage = page;
+	    var totalItems = currentWishlistProducts.length;
+	    var totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+	    
+	    if (currentWishlistPage < 1) currentWishlistPage = 1;
+	    if (currentWishlistPage > totalPages) currentWishlistPage = totalPages;
+
+	    $('#prevWishlistPage').prop('disabled', currentWishlistPage === 1);
+	    $('#nextWishlistPage').prop('disabled', currentWishlistPage === totalPages);
+
+	    // Generate page numbers dynamically
+	    var pageBtnsHtml = '';
+	    for (var i = 1; i <= totalPages; i++) {
+	        var activeClass = (i === currentWishlistPage) ? 'btn-primary' : 'btn-default';
+	        pageBtnsHtml += '<button type="button" class="btn ' + activeClass + ' btn-xs btn-flat wishlist-page-btn" data-page="' + i + '" style="margin: 0 2px; min-width: 22px;">' + i + '</button>';
+	    }
+	    $('#wishlistPageNumbers').html(pageBtnsHtml);
+
+	    var startIndex = (currentWishlistPage - 1) * itemsPerPage;
+	    var endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+	    var html = '';
+	    if (totalItems > 0) {
+	        for (var i = startIndex; i < endIndex; i++) {
+	            var product = currentWishlistProducts[i];
+	            var imgHtml = '';
+	            if (product.main_image) {
+	                imgHtml = '<img src="' + product.main_image + '" style="width: 50px; height: auto; display: block; margin: 0 auto;" class="img-thumbnail" />';
+	            } else {
+	                imgHtml = '<span class="text-muted">No Image</span>';
+	            }
+	            
+	            var priceHtml = product.price ? product.price + ' AED' : 'N/A';
+
+	            html += '<tr>';
+	            html += '<td style="vertical-align: middle; text-align: center;">' + imgHtml + '</td>';
+	            html += '<td style="vertical-align: middle; font-weight: 600;">' + product.title + '</td>';
+	            html += '<td style="vertical-align: middle; text-align: right; font-weight: bold;">' + priceHtml + '</td>';
+	            html += '</tr>';
+	        }
+	    } else {
+	        html = '<tr><td colspan="3" class="text-center text-muted">Wishlist is empty.</td></tr>';
+	    }
+
+	    $('#wishlistTableBody').html(html);
+	}
+
+	$(document).on('click', '.view-wishlist', function() {
+	    var userId = $(this).data('user-id');
+	    var data = window.userWishlists ? window.userWishlists[userId] : null;
+	    if (!data) return;
+
+	    $('#wishlistModalLabel').text(data.username + "'s Wishlist");
+
+	    currentWishlistProducts = data.products || [];
+	    
+	    var totalItems = currentWishlistProducts.length;
+	    if (totalItems <= itemsPerPage) {
+	        $('#wishlistPagination').hide();
+	    } else {
+	        $('#wishlistPagination').show();
+	    }
+
+	    renderWishlistPage(1);
+	    $('#wishlistModal').modal('show');
+	});
+
+	$(document).on('click', '#prevWishlistPage', function() {
+	    if (currentWishlistPage > 1) {
+	        renderWishlistPage(currentWishlistPage - 1);
+	    }
+	});
+
+	$(document).on('click', '#nextWishlistPage', function() {
+	    var totalPages = Math.ceil(currentWishlistProducts.length / itemsPerPage) || 1;
+	    if (currentWishlistPage < totalPages) {
+	        renderWishlistPage(currentWishlistPage + 1);
+	    }
+	});
+
+	$(document).on('click', '.wishlist-page-btn', function() {
+	    var page = parseInt($(this).data('page'));
+	    if (page && page !== currentWishlistPage) {
+	        renderWishlistPage(page);
+	    }
+	});
 	</script>
+
+	<!-- Wishlist Modal -->
+	<div class="modal fade" id="wishlistModal" tabindex="-1" role="dialog" aria-labelledby="wishlistModalLabel">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content" style="border-radius: 6px;">
+	            <div class="modal-header bg-primary btn-primary" style="border-top-left-radius: 6px; border-top-right-radius: 6px;">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8;"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="wishlistModalLabel" style="color: white; font-weight: 600;">User's Wishlist</h4>
+	            </div>
+	            <div class="modal-body" style="max-height: 450px; overflow-y: auto; padding: 15px;">
+	                <table class="table table-bordered table-striped table-hover" style="margin-bottom: 0;">
+	                    <thead>
+	                        <tr class="info">
+	                            <th style="width: 80px; text-align: center;">Image</th>
+	                            <th>Product Title</th>
+	                            <th style="width: 120px; text-align: right;">Price</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody id="wishlistTableBody">
+	                        <!-- Dynamically filled -->
+	                    </tbody>
+	                </table>
+	            </div>
+	            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px;">
+	                <div id="wishlistPagination" style="display: flex; align-items: center;">
+	                    <button type="button" class="btn btn-default btn-xs btn-flat" id="prevWishlistPage" style="margin-right: 5px;"><i class="fa fa-chevron-left"></i> Previous</button>
+	                    <div id="wishlistPageNumbers" style="display: inline-flex; align-items: center;"></div>
+	                    <button type="button" class="btn btn-default btn-xs btn-flat" id="nextWishlistPage" style="margin-left: 5px;">Next <i class="fa fa-chevron-right"></i></button>
+	                </div>
+	                <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 @stop

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductRequest extends FormRequest
+class BrandRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,25 +27,20 @@ class ProductRequest extends FormRequest
             case 'POST':
                 {
                     return [
-                        'title' => 'required',
-                        'category_id' => 'required',
-                        'price' => 'required',
-                        'main_image' => 'required',
-                        'description' => 'required',
-                        'brand_id' => 'nullable'
+                        'name' => 'required',
+                        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                     ];
                 }
             case 'PATCH':
+            case 'PUT':
                 {
                     return [
-                        'title' => 'required',
-                        'category_id' => 'required',
-                        'price' => 'required',
-                        'description' => 'required',
-                        'brand_id' => 'nullable'
+                        'name' => 'required',
+                        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                     ];
                 }
-            default:break;
+            default:
+                return [];
         }
     }
 }

@@ -3,7 +3,10 @@
         <h2 class="product-heading mb-0">{{ $product['title'] }} </h2>
         <!-- <span class="text-primary">Treadmill</span> -->
         <div class="brands mb-lg-0 mb-2">
-            @if(!empty(Helper::getProductBrand($product['id'])))
+            @if($brand)
+            <span class="badge bg-dark d-inline-block p-2 mr-2 mb-1"><i class="fas fa-check-circle me-1"
+                    aria-hidden="true"></i> {{ $brand->name }} </span>
+            @elseif(!empty(Helper::getProductBrand($product['id'])))
             <span class="badge bg-dark d-inline-block p-2 mr-2 mb-1"><i class="fas fa-check-circle me-1"
                     aria-hidden="true"></i> {!! Helper::getProductBrand($product['id']) !!} </span>
             @endif
@@ -89,6 +92,27 @@
                 Price includes <strong>5% VAT</strong> (AED {{ number_format($vatAmount, 2) }})
             </p>
         </div> 
+        @if($brand)
+        <div class="brand-section my-3 d-flex align-items-center flex-wrap">
+            <span class="text-muted fw-bold me-2" style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1;">Brand:</span>
+            <a href="{{ $brand->link ?? '#' }}" target="_blank" class="d-inline-flex align-items-center text-decoration-none me-2">
+                @if($brand->image)
+                    <img src="{{ $brand->image }}" alt="{{ $brand->name }}" style="height: 35px; object-fit: contain; background: white; padding: 2px; border: 1px solid #ddd; border-radius: 4px;" class="me-2">
+                @endif
+                <strong class="text-danger fs-5 hover-underline" style="color: #dc3545 !important; line-height: 1;">{{ $brand->name }}</strong>
+            </a>
+            @if($brand->description)
+                <a href="javascript:void(0)" class="text-danger d-inline-flex align-items-center justify-content-center" 
+                   data-bs-toggle="popover" 
+                   data-bs-trigger="focus" 
+                   data-bs-placement="top" 
+                   data-bs-content="{{ $brand->description }}"
+                   title="About {{ $brand->name }}">
+                    <i class="fas fa-info-circle fa-sm" aria-hidden="true"></i>
+                </a>
+            @endif
+        </div>
+        @endif
         <p class="mb-2"><strong>Note:</strong> Next Day Delivery is only available for Dubai and Abu
             Dhabi</p>
         <div class="shopping-now mobile-sticky my-lg-4 d-flex">

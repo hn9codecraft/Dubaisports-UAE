@@ -8,13 +8,13 @@ use Livewire\Component;
 class HomeProductList extends Component
 {
     public $products = [];
- 
+
     public function mount($type)
     {
-        if($type == 'new') {
-            $this->products = Product::where('status','1')->orderBy('id', 'desc')->with(['category'])->take(8)->get()->toArray();
+        if ($type == 'new') {
+            $this->products = Product::where('status', '1')->orderBy('id', 'desc')->with(['category'])->take(8)->get()->toArray();
         } else {
-            $this->products = Product::where($type, '1')->where('status','1')->orderBy('sort', 'asc')->with(['category'])->get()->toArray();
+            $this->products = Product::where($type, '1')->where('status', '1')->orderBy('sort', 'asc')->with(['category'])->get()->toArray();
         }
     }
 

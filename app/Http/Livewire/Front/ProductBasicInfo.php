@@ -10,7 +10,7 @@ use App\Models\Stock;
 class ProductBasicInfo extends Component
 {
     public $product, $productQty = 1, $productPrice, $productDiscountPrice, $productStock = 0, $additionalPriceEnabled = '0',
-    $additionalPriceList = [], $selectedPriceOptionId = 0;
+    $additionalPriceList = [], $selectedPriceOptionId = 0, $brand;
 
     public function mount()
     {
@@ -19,6 +19,7 @@ class ProductBasicInfo extends Component
         $this->productStock = $creditStock - $debitStock;
         $this->additionalPriceEnabled = $this->product['additional_price_enable'];
         $this->additionalPriceList = json_decode($this->product['price_list'], true);
+        $this->brand = !empty($this->product['brand_id']) ? \App\Models\Brand::find($this->product['brand_id']) : null;
         $this->productPrice();
     }
 

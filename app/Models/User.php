@@ -49,4 +49,10 @@ class User extends Authenticatable
     // {
     //     $this->attributes['password'] = \Hash::make($value);
     // }
+
+    public function wishlistProducts()
+    {
+        return $this->belongsToMany(\App\Models\Product::class, 'wishlists', 'user_id', 'product_id');
+    }
 }
+

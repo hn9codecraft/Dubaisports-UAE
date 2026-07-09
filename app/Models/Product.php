@@ -27,8 +27,11 @@ class Product extends Model
         'image_prefix_folder',
         'best_seller',
         'popular_product',
+        'combo_offer',
+        'clearance_sale',
         'additional_price_enable',
-        'price_list'
+        'price_list',
+        'brand_id'
     ];
 
     public function getMainImageAttribute($value) {
@@ -37,6 +40,10 @@ class Product extends Model
 
     public function category() {
         return $this->belongsTo('App\Models\Category');
+    }
+
+    public function brand() {
+        return $this->belongsTo('App\Models\Brand');
     }
 
     public function setTitleAttribute($value) {
@@ -65,5 +72,13 @@ class Product extends Model
 
     public function setPopularProductAttribute($value) {
         $this->attributes['popular_product'] = $value ? '1' : '0';
+    }
+
+    public function setComboOfferAttribute($value) {
+        $this->attributes['combo_offer'] = $value ? '1' : '0';
+    }
+
+    public function setClearanceSaleAttribute($value) {
+        $this->attributes['clearance_sale'] = $value ? '1' : '0';
     }
 }

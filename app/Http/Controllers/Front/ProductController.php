@@ -24,6 +24,16 @@ class ProductController extends Controller
         return view('frontend.product.list', compact('categoryGroupId', 'categoryId'));
     }
 
+    public function comboOffers()
+    {
+        return view('frontend.product.combo_offers');
+    }
+
+    public function clearanceSale()
+    {
+        return view('frontend.product.clearance_sale');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -53,7 +63,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('status', '1')->with(['category', 'productSpecification'])->where('slug', $id)->first();
+        $product = Product::where('status', '1')->with(['category', 'productSpecification', 'brand'])->where('slug', $id)->first();
         if (empty($product)) {
             return redirect()->route('home');
         }

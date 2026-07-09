@@ -33,6 +33,12 @@
                     @endif
                 </li>
                 @endforeach
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('clearance-sale') }}">Clearance Sale</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('combo-offers') }}">Combo Offers</a>
+                </li>
                 <li class="nav-item align-self-end d-md-inline-block d-none">
                     <a class="btn btn-success text-white px-4 text-uppercase py-2" href="https://alvo.chat/2yjn"><i class="fa-brands fa-whatsapp fa-lg me-1"></i> Contact</a>
                 </li>
@@ -89,6 +95,12 @@
                     @endif
                 </li>
                 @endforeach
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('clearance-sale') }}">Clearance Sale</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('combo-offers') }}">Combo Offers</a>
+                </li>
                 <li class="nav-item align-self-end">
                     <a class="btn btn-success text-white px-4 text-uppercase py-2" href="https://alvo.chat/2yjn"><i class="fa-brands fa-whatsapp fa-lg me-1"></i> Contact</a>
                 </li>

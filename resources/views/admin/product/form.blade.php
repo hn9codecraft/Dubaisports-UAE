@@ -7,6 +7,15 @@
 		</div>
 	</div>
 </div>
+<div class="box-body">
+	<div class="form-group">
+		<label for="" class="col-sm-2 control-label">Brand</label>
+		<div class="col-sm-8">
+			{{ Form::select('brand_id', ['' => 'Select Brand'] + ($brands ?? []), old('brand_id'), ['class' => 'form-control' ]) }}
+			<span class='text-danger'>{{ $errors->first('brand_id') }}</span>
+		</div>
+	</div>
+</div>
 <livewire:category-option-attribute :categoryId="isset($data) ? $data['category_id'] : false"/>
 <div class="box-body">
 	<div class="form-group">
@@ -112,6 +121,24 @@
 		<div class="col-sm-8" style="padding-top: 10px;">
 		{{ Form::checkbox('popular_product', old('popular_product')) }}
 		<span class='text-danger'>{{ $errors->first('popular_product') }}</span>
+		</div>
+	</div>
+</div>
+<div class="box-body">
+	<div class="form-group">
+		<label for="" class="col-sm-2 control-label">Combo Offer</label>
+		<div class="col-sm-8" style="padding-top: 10px;">
+		{{ Form::checkbox('combo_offer', old('combo_offer')) }}
+		<span class='text-danger'>{{ $errors->first('combo_offer') }}</span>
+		</div>
+	</div>
+</div>
+<div class="box-body">
+	<div class="form-group">
+		<label for="" class="col-sm-2 control-label">Clearance Sale</label>
+		<div class="col-sm-8" style="padding-top: 10px;">
+		{{ Form::checkbox('clearance_sale', old('clearance_sale')) }}
+		<span class='text-danger'>{{ $errors->first('clearance_sale') }}</span>
 		</div>
 	</div>
 </div>
