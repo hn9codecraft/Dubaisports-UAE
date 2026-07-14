@@ -107,7 +107,7 @@
                     <div class="tab-pane fade" id="Delivery" role="tabpanel"
                     aria-labelledby="Delivery-tab" tabindex="0">
                     <div class="p-4">
-                        {!! $product['description_2'] !!}
+                        {!! $deliveryContent ?? $product['description_2'] !!}
                     </div>
                 </div>
                 </div>

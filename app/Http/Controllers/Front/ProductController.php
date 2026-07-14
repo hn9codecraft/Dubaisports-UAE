@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\CategoryGroup;
+use App\Models\CMS;
 
 class ProductController extends Controller
 {
@@ -71,8 +72,10 @@ class ProductController extends Controller
         if(!empty($product['other_images'])) {
             $product['other_images'] = json_decode($product['other_images'], true);
         }
+
+        $deliveryContent = CMS::where('slug', 'installation')->value('content');
         
-        return view('frontend.product.info', compact('product'));
+        return view('frontend.product.info', compact('product', 'deliveryContent'));
     }
 
     /**
