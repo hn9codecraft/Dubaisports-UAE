@@ -73,7 +73,7 @@
 <div class="login-page spacing-y">
     <div class="d-flex justify-content-center align-items-center position-relative h-100">
       <div class="sign-in-form">
-        <form method="POST" action="{{ route('login') }}" class="text-center m-auto p-4">
+        <form id="loginForm" method="POST" action="{{ route('login') }}" class="text-center m-auto p-4">
             @csrf
           <img src="{{ env('APP_URL').'front/images/site_logo.png' }}" alt="site_logo" class="my-4 img-fluid">
           <div class="d-flex form-group mb-3">
@@ -95,9 +95,7 @@
             @enderror
           </div>
           @if(env('RECAPTCHA_SITE_KEY'))
-              <div class="d-flex justify-content-center mb-3">
-                  <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
-              </div>
+              <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
               @error('g-recaptcha-response')
                   <div class="text-danger mb-3">
                       <strong>{{ $message }}</strong>
@@ -123,6 +121,21 @@
 
 @section('js')
     @if(env('RECAPTCHA_SITE_KEY'))
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}" async defer></script>
+        <script>
+            $('#loginForm').submit(function(e) {
+                var form = this;
+                if ($('#g-recaptcha-response').val()) {
+                    return true;
+                }
+                e.preventDefault();
+                grecaptcha.ready(function() {
+                    grecaptcha.execute("{{ env('RECAPTCHA_SITE_KEY') }}", {action: 'login'}).then(function(token) {
+                        $('#g-recaptcha-response').val(token);
+                        form.submit();
+                    });
+                });
+            });
+        </script>
     @endif
 @endsection

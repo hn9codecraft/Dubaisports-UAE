@@ -1,0 +1,72 @@
+=====================================================================
+DATABASE SCHEMA CHANGES & URLS FOR PRODUCTION DEPLOYMENT
+=====================================================================
+
+1. DEPLOYMENT VIA MIGRATIONS (RECOMMENDED)
+------------------------------------------
+You can apply all the database changes automatically by running:
+php artisan migrate
+
+The migration files created are:
+* database/migrations/2026_07_07_183407_create_brands_table.php
+* database/migrations/2026_07_07_183409_add_brand_and_offers_to_products_table.php
+* database/migrations/2026_07_07_183411_modify_vat_in_orders_table.php
+
+All migrations are designed to run safely (checking if tables or columns exist first).
+
+2. MANUAL DATABASE CHANGES (RAW SQL ALTERNATIVE)
+------------------------------------------------
+-- Add "Combo Offer" column to products table
+ALTER TABLE products ADD COLUMN combo_offer ENUM('0', '1') DEFAULT '0' AFTER popular_product;
+
+-- Add "Clearance Sale" column to products table
+ALTER TABLE products ADD COLUMN clearance_sale ENUM('0', '1') DEFAULT '0' AFTER combo_offer;
+
+-- Add "brand_id" column to products table
+ALTER TABLE products ADD COLUMN brand_id INT UNSIGNED NULL AFTER category_id;
+
+-- Create "brands" table
+CREATE TABLE brands (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NULL,
+    image VARCHAR(255) NULL,
+    link VARCHAR(255) NULL,
+    status ENUM('0', '1') DEFAULT '1',
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Increase "vat" column capacity in orders table to prevent out-of-range numeric limits
+ALTER TABLE orders MODIFY COLUMN vat DOUBLE(10,2) NOT NULL DEFAULT '0.00';
+
+
+3. ENVIRONMENT VARIABLES (.env) FOR DEPLOYMENT
+----------------------------------------------
+Add the following Google reCAPTCHA v3 keys to your production `.env` file to enable the bot check:
+
+RECAPTCHA_SITE_KEY=your_recaptcha_v3_site_key
+RECAPTCHA_SECRET_KEY=your_recaptcha_v3_secret_key
+
+*Note: If left blank or omitted, the login page will automatically disable and hide reCAPTCHA protection and operate without it.*
+
+
+4. POST-DEPLOYMENT COMMANDS
+---------------------------
+Run these commands in production to clear system caching and register the new routes:
+php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+
+
+5. PUBLIC URLS
+--------------
+-- Combo Offers Page
+http://127.0.0.1:8000/combo-offers
+Production: https://dubaisportsuae.com/combo-offers
+
+-- Clearance Sale Page
+http://127.0.0.1:8000/clearance-sale
+Production: https://dubaisportsuae.com/clearance-sale
+

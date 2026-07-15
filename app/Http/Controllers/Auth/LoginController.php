@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
 class LoginController extends Controller
 {
     /*
@@ -36,5 +39,42 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        if (env('RECAPTCHA_SECRET_KEY')) {
+            $token = $request->input('g-recaptcha-response');
+            if (!$token) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'g-recaptcha-response' => ['reCAPTCHA validation token is missing.'],
+                ]);
+            }
+
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $token,
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (!$response->successful() || !$response->json('success') || $response->json('score') < 0.5) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'g-recaptcha-response' => ['reCAPTCHA verification failed. Please try again.'],
+                ]);
+            }
+        }
     }
 }
