@@ -56,7 +56,7 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (env('RECAPTCHA_SECRET_KEY')) {
+        if (config('services.recaptcha.secret_key')) {
             $token = $request->input('g-recaptcha-response');
             if (!$token) {
                 throw \Illuminate\Validation\ValidationException::withMessages([
@@ -65,7 +65,7 @@ class LoginController extends Controller
             }
 
             $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'secret' => config('services.recaptcha.secret_key'),
                 'response' => $token,
                 'remoteip' => $request->ip(),
             ]);

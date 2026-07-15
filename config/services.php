@@ -33,5 +33,10 @@ return [
     'nomod' => [
         'key' => env('NOMOD_API_KEY'),
         'base_url' => env('NOMOD_BASE_URL', 'https://api.nomod.com/v1'),
-    ] 
+    ],
+
+    'recaptcha' => [
+        'site_key' => env('RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+    ]
 ];

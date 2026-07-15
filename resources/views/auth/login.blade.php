@@ -94,7 +94,7 @@
                 </span>
             @enderror
           </div>
-          @if(env('RECAPTCHA_SITE_KEY'))
+          @if(config('services.recaptcha.site_key'))
               <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
               @error('g-recaptcha-response')
                   <div class="text-danger mb-3">
@@ -120,8 +120,8 @@
 @endsection
 
 @section('js')
-    @if(env('RECAPTCHA_SITE_KEY'))
-        <script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}" async defer></script>
+    @if(config('services.recaptcha.site_key'))
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}" async defer></script>
         <script>
             $('#loginForm').submit(function(e) {
                 var form = this;
@@ -130,7 +130,7 @@
                 }
                 e.preventDefault();
                 grecaptcha.ready(function() {
-                    grecaptcha.execute("{{ env('RECAPTCHA_SITE_KEY') }}", {action: 'login'}).then(function(token) {
+                    grecaptcha.execute("{{ config('services.recaptcha.site_key') }}", {action: 'login'}).then(function(token) {
                         $('#g-recaptcha-response').val(token);
                         form.submit();
                     });
