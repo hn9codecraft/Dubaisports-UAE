@@ -9,6 +9,15 @@
 </div>
 <div class="box-body">
 	<div class="form-group">
+		<label for="" class="col-sm-2 control-label">URL Slug</label>
+		<div class="col-sm-8">
+			{{ Form::text('slug', old('slug'), ['class' => 'form-control', 'placeholder' => 'Leave empty to auto-generate from title' ]) }}
+		<span class='text-danger'>{{ $errors->first('slug') }}</span>
+		</div>
+	</div>
+</div>
+<div class="box-body">
+	<div class="form-group">
 		<label for="" class="col-sm-2 control-label">Brand</label>
 		<div class="col-sm-8">
 			{{ Form::select('brand_id', ['' => 'Select Brand'] + ($brands ?? []), old('brand_id'), ['class' => 'form-control' ]) }}

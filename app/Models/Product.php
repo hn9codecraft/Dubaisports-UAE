@@ -48,7 +48,27 @@ class Product extends Model
 
     public function setTitleAttribute($value) {
         $this->attributes['title'] = Str::title($value);
-        $this->attributes['slug'] = Str::slug($value, '-');
+        if (empty($this->attributes['slug'])) {
+            $this->attributes['slug'] = Str::slug($value, '-');
+        }
+    }
+
+    public function setSlugAttribute($value) {
+        if (!empty($value)) {
+            $this->attributes['slug'] = Str::slug($value, '-');
+        }
+    }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::saving(function ($product) {
+            if (empty($product->slug)) {
+                $product->slug = Str::slug($product->title, '-');
+            } else {
+                $product->slug = Str::slug($product->slug, '-');
+            }
+        });
     }
 
     public function productSpecification() {

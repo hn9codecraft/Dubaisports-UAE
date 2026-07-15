@@ -28,6 +28,7 @@ class ProductRequest extends FormRequest
                 {
                     return [
                         'title' => 'required',
+                        'slug' => 'nullable|string',
                         'category_id' => 'required',
                         'price' => 'required',
                         'main_image' => 'required',
@@ -39,6 +40,7 @@ class ProductRequest extends FormRequest
                 {
                     return [
                         'title' => 'required',
+                        'slug' => 'nullable|string',
                         'category_id' => 'required',
                         'price' => 'required',
                         'description' => 'required',
