@@ -60,7 +60,20 @@ php artisan cache:clear
 php artisan view:clear
 
 
-5. PUBLIC URLS
+5. ADMIN CREDENTIALS UPDATE (PRODUCTION)
+----------------------------------------
+To update the admin credentials on production to:
+Email: admin@admin.com
+Password: 12345
+
+Run the following SQL query on your production database:
+UPDATE admins SET email = 'admin@admin.com', password = '$2y$10$FW9DX5b26yEPTIizMLewI.JUc6ELkcQX8f4Pbuf1rYc5rFRY94SSy' WHERE id = 1;
+
+Alternatively, you can run this command via SSH on the server:
+php artisan tinker --execute=' $admin = \App\Models\Admin::find(1); $admin->email = "admin@admin.com"; $admin->password = bcrypt("12345"); $admin->save(); '
+
+
+6. PUBLIC URLS
 --------------
 -- Combo Offers Page
 http://127.0.0.1:8000/combo-offers
