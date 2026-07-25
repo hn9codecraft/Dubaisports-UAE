@@ -10,16 +10,30 @@ use App\Models\Stock;
 class ProductBasicInfo extends Component
 {
     public $product, $productQty = 1, $productPrice, $productDiscountPrice, $productStock = 0, $additionalPriceEnabled = '0',
-    $additionalPriceList = [], $selectedPriceOptionId = 0, $brand;
+    $additionalPriceList = [], $selectedPriceOptionId = 0, $brand, $selectedVariantSlug;
 
-    public function mount()
+    public function mount($selectedVariantSlug = null)
     {
         $creditStock = Stock::where(['product_id' => $this->product['id'], 'type' => 'Credit'])->sum('qty');
         $debitStock = Stock::where(['product_id' => $this->product['id'], 'type' => 'Debit'])->sum('qty');
         $this->productStock = $creditStock - $debitStock;
         $this->additionalPriceEnabled = $this->product['additional_price_enable'];
-        $this->additionalPriceList = json_decode($this->product['price_list'], true);
+        $this->additionalPriceList = json_decode($this->product['price_list'], true) ?? [];
         $this->brand = !empty($this->product['brand_id']) ? \App\Models\Brand::find($this->product['brand_id']) : null;
+        $this->selectedVariantSlug = $selectedVariantSlug ?? request('variant') ?? request('option');
+
+        if ($this->additionalPriceEnabled == '1' && !empty($this->additionalPriceList)) {
+            if ($this->selectedVariantSlug) {
+                foreach ($this->additionalPriceList as $key => $option) {
+                    $optionSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+                    if ($optionSlug === $this->selectedVariantSlug) {
+                        $this->selectedPriceOptionId = $key;
+                        break;
+                    }
+                }
+            }
+        }
+
         $this->productPrice();
     }
 
@@ -50,22 +64,32 @@ class ProductBasicInfo extends Component
 
     public function productPrice()
     {
-        if($this->additionalPriceEnabled == '1') {
-            $this->productPrice = $this->productQty * $this->additionalPriceList[$this->selectedPriceOptionId]['price'];
-            $this->productDiscountPrice = $this->productQty * $this->additionalPriceList[$this->selectedPriceOptionId]['discounted_price'];
+        if($this->additionalPriceEnabled == '1' && !empty($this->additionalPriceList)) {
+            $option = $this->additionalPriceList[$this->selectedPriceOptionId] ?? reset($this->additionalPriceList);
+            $price = isset($option['price']) && $option['price'] !== '' ? (float)$option['price'] : (float)$this->product['price'];
+            $discountedPrice = isset($option['discounted_price']) && $option['discounted_price'] !== '' ? (float)$option['discounted_price'] : $price;
+            
+            $this->productPrice = $this->productQty * $price;
+            $this->productDiscountPrice = $this->productQty * $discountedPrice;
         } else {
-            $this->productPrice = $this->productQty * $this->product['price'];
-            $this->productDiscountPrice = $this->productQty * $this->product['discounted_price'];
+            $this->productPrice = $this->productQty * (float)$this->product['price'];
+            $this->productDiscountPrice = $this->productQty * (float)$this->product['discounted_price'];
         }
-        // $this->product['discounted_price'] = $this->productQty * $this->product['discounted_price'];
-        // if($this->product['discount_percentage'] > 0) {
-        //     $this->product['discount_percentage'] = $this->productQty * $this->product['discount_percentage'];
-        // }
     }
 
     public function selectOption($key) {
         $this->selectedPriceOptionId = $key;
         $this->productPrice();
+
+        if (isset($this->additionalPriceList[$key])) {
+            $option = $this->additionalPriceList[$key];
+            $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+            
+            $this->dispatchBrowserEvent('update-variant-url', [
+                'productSlug' => $this->product['slug'],
+                'variantSlug' => $variantSlug
+            ]);
+        }
     }
 
     public function addToCart()

@@ -62,7 +62,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $variant_slug = null)
     {
         $product = Product::where('status', '1')->with(['category', 'productSpecification', 'brand'])->where('slug', $id)->first();
         if (empty($product)) {
@@ -73,9 +73,11 @@ class ProductController extends Controller
             $product['other_images'] = json_decode($product['other_images'], true);
         }
 
+        $selectedVariantSlug = $variant_slug ?? request('variant') ?? request('option');
+
         $deliveryContent = CMS::where('slug', 'installation')->value('content');
         
-        return view('frontend.product.info', compact('product', 'deliveryContent'));
+        return view('frontend.product.info', compact('product', 'deliveryContent', 'selectedVariantSlug'));
     }
 
     /**

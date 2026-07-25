@@ -45,7 +45,7 @@
                 </div>
 
             </div>
-            <livewire:front.product-basic-info :product="$product"/>
+            <livewire:front.product-basic-info :product="$product" :selectedVariantSlug="$selectedVariantSlug ?? null"/>
         </div>
     </div>
 </div>

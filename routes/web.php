@@ -33,6 +33,7 @@ Route::group(['as' => 'front.', 'namespace' => 'Front',  'middleware' => []], fu
     Route::post('products/delete', 'ProductController@delete')->name('products.delete');
     Route::get('/combo-offers', 'ProductController@comboOffers')->name('combo-offers');
     Route::get('/clearance-sale', 'ProductController@clearanceSale')->name('clearance-sale');
+    Route::get('/products/{id}/{variant_slug}', 'ProductController@show')->name('products.variant.show');
     Route::resource('/products', 'ProductController');
     Route::get('/{category_group_slug}/{category_slug}', 'ProductController@index')->name('category.products');
 

@@ -62,14 +62,20 @@ class ProductJob
         $data->discounted_price = ($this->data['price'] - ( $this->data['price'] * $this->data['discount_percentage'] ) / 100);
         
         //--- Additional Price
-        if(isset($this->data['additional_price_enable'])) {
+        if(isset($this->data['additional_price_enable']) && !empty($this->data['price_list'])) {
             $tempPriceArray = [];
-            foreach(json_decode($this->data['price_list'], true) as $key => $value) {
-                $tempPriceArray[$key] = [
-                    'title' => $value['title'],
-                    'price' => $value['price'],
-                    'discounted_price' => ($value['price'] - ( $value['price'] * $this->data['discount_percentage'] ) / 100)
-                ];
+            $priceListItems = json_decode($this->data['price_list'], true);
+            if (is_array($priceListItems)) {
+                foreach($priceListItems as $key => $value) {
+                    $title = $value['title'] ?? '';
+                    $slug = !empty($value['slug']) ? \Str::slug($value['slug'], '-') : \Str::slug($title, '-');
+                    $tempPriceArray[$key] = [
+                        'title' => $title,
+                        'slug'  => $slug,
+                        'price' => $value['price'] ?? 0,
+                        'discounted_price' => (($value['price'] ?? 0) - ( ($value['price'] ?? 0) * ($this->data['discount_percentage'] ?? 0) ) / 100)
+                    ];
+                }
             }
             $data->price_list = json_encode($tempPriceArray);
         }

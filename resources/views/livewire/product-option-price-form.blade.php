@@ -18,19 +18,25 @@
             @foreach($optionPriceList as $key => $optionPrice)
             <div class="row" style="padding-top: 5px;">
                 <div class="form-group col-md-4">
-                    <label for="inputEmail3" class="col-sm-4 control-label">Title</label>
+                    <label class="col-sm-4 control-label">Title</label>
                     <div class="col-sm-8">
-                        <input type="text" wire:model="optionPriceList.{{$key}}.title" class="form-control"/>
+                        <input type="text" wire:model.lazy="optionPriceList.{{$key}}.title" class="form-control" placeholder="e.g. 10 Pair Hex Dumbbells"/>
                     </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="inputEmail3" class="col-sm-4 control-label">Price</label>
+                <div class="form-group col-md-3">
+                    <label class="col-sm-4 control-label">Slug</label>
                     <div class="col-sm-8">
-                        <input type="number" wire:model="optionPriceList.{{$key}}.price" class="form-control"/>
+                        <input type="text" wire:model.lazy="optionPriceList.{{$key}}.slug" class="form-control" placeholder="e.g. 1-to-10-kgs"/>
                     </div>
                 </div>
-                <div class="row col-sm-2" style="float:right;">
-                    <a class="btn btn-danger my-2 my-sm-0"  wire:click="remove({{$key}})">Remove</a>
+                <div class="form-group col-md-3">
+                    <label class="col-sm-4 control-label">Price</label>
+                    <div class="col-sm-8">
+                        <input type="number" step="0.01" wire:model="optionPriceList.{{$key}}.price" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-2 text-right">
+                    <a class="btn btn-danger my-2 my-sm-0" wire:click="remove({{$key}})">Remove</a>
                 </div>
             </div>
             @endforeach

@@ -137,4 +137,14 @@
                 <livewire:service-offer />
 
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('update-variant-url', event => {
+                if (event.detail && event.detail.productSlug && event.detail.variantSlug) {
+                    const newUrl = '/products/' + event.detail.productSlug + '/' + event.detail.variantSlug;
+                    window.history.pushState({path: newUrl}, '', newUrl);
+                }
+            });
+        });
+    </script>
 </div>
