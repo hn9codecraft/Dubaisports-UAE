@@ -43,10 +43,10 @@ ALTER TABLE orders MODIFY COLUMN vat DOUBLE(10,2) NOT NULL DEFAULT '0.00';
 
 3. ENVIRONMENT VARIABLES (.env) FOR DEPLOYMENT
 ----------------------------------------------
-Add the following Google reCAPTCHA v3 keys to your production `.env` file to enable the bot check:
+Add the following Google reCAPTCHA v2 keys to your production `.env` file to enable the bot check:
 
-RECAPTCHA_SITE_KEY=your_recaptcha_v3_site_key
-RECAPTCHA_SECRET_KEY=your_recaptcha_v3_secret_key
+RECAPTCHA_SITE_KEY=your_recaptcha_v2_site_key
+RECAPTCHA_SECRET_KEY=your_recaptcha_v2_secret_key
 
 *Note: If left blank or omitted, the login page will automatically disable and hide reCAPTCHA protection and operate without it.*
 

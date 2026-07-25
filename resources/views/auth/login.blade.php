@@ -95,12 +95,14 @@
             @enderror
           </div>
           @if(config('services.recaptcha.site_key'))
-              <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
-              @error('g-recaptcha-response')
-                  <div class="text-danger mb-3">
-                      <strong>{{ $message }}</strong>
-                  </div>
-              @enderror
+              <div class="mb-3">
+                  <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                  @error('g-recaptcha-response')
+                      <div class="text-danger mt-1">
+                          <strong>{{ $message }}</strong>
+                      </div>
+                  @enderror
+              </div>
           @endif
           <button type="submit" class="btn btn-info mt-3 px-4">Login </button>
           <a href="{{ route('password.request') }}" class="btn btn-link d-block text-center mb-2">Forget Password</a>
@@ -121,21 +123,6 @@
 
 @section('js')
     @if(config('services.recaptcha.site_key'))
-        <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}" async defer></script>
-        <script>
-            $('#loginForm').submit(function(e) {
-                var form = this;
-                if ($('#g-recaptcha-response').val()) {
-                    return true;
-                }
-                e.preventDefault();
-                grecaptcha.ready(function() {
-                    grecaptcha.execute("{{ config('services.recaptcha.site_key') }}", {action: 'login'}).then(function(token) {
-                        $('#g-recaptcha-response').val(token);
-                        form.submit();
-                    });
-                });
-            });
-        </script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     @endif
 @endsection

@@ -70,7 +70,7 @@ class LoginController extends Controller
                 'remoteip' => $request->ip(),
             ]);
 
-            if (!$response->successful() || !$response->json('success') || $response->json('score') < 0.5) {
+            if (!$response->successful() || !$response->json('success')) {
                 throw \Illuminate\Validation\ValidationException::withMessages([
                     'g-recaptcha-response' => ['reCAPTCHA verification failed. Please try again.'],
                 ]);
