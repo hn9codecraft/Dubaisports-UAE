@@ -60,7 +60,7 @@ class LoginController extends Controller
             $token = $request->input('g-recaptcha-response');
             if (!$token) {
                 throw \Illuminate\Validation\ValidationException::withMessages([
-                    'g-recaptcha-response' => ["Please check the 'I'm not a robot' checkbox before logging in."],
+                    'g-recaptcha-response' => ['Please check the reCAPTCHA box.'],
                 ]);
             }
 
