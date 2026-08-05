@@ -78,6 +78,7 @@
                     class="d-flex position-relative border-0 border-secondary px-lg-3 px-0 search-icon"><span
                         class="custom-icon custom-search"><span class="path1"></span><span
                             class="path2"></span></span></a></li>
+        <li class="d-lg-inline-block d-none"><a href="https://www.google.com/maps?ll=25.274542,55.382121&z=14&t=m&hl=en&gl=US&mapclient=embed&cid=6160283369927868773" class="d-flex position-relative border-end border-secondary" target="_blank"><i class="fa-solid fa-location-dot me-2 fs-5"></i><span class="link-content d-xl-inline-block d-none">Find Store</span></a></li>
         <li class="d-lg-inline-block d-none"><a href="tel:+971526054947" class="d-flex position-relative border-end border-secondary"><span
                     class="custom-icon custom-telephone me-2"><span class="path1"></span><span
                         class="path2"></span></span><span class="link-content d-xl-inline-block d-none">+971 526054947</span></a></li>

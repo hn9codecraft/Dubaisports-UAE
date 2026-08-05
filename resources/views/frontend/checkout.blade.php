@@ -13,7 +13,7 @@
                     <h5 class="mb-4">Billing Information</h5>
                     <div class="d-flex">
                         <div class="col-md-4 me-1 py-2">
-                        <input type="text" class="form-control" name="first_name" value="{{ old('first_name') ?: (auth()->user() ? auth()->user()->first_name : '') }}" placeholder="First Name" @error('first_name') autofocus @enderror>
+                        <input type="text" class="form-control" name="first_name" value="{{ old('first_name') ?: (auth()->user() ? auth()->user()->first_name : '') }}" placeholder="First Name" required @error('first_name') autofocus @enderror>
                             @error('first_name')
                             <span class="text-danger" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -21,7 +21,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4 me-1 py-2">
-                            <input type="number" name="phone" value="{{ old('phone') ?: (auth()->user() ? auth()->user()->phone : '') }}" class="form-control" placeholder="Mobile Number" @error('phone') autofocus @enderror>
+                            <input type="number" name="phone" value="{{ old('phone') ?: (auth()->user() ? auth()->user()->phone : '') }}" class="form-control" placeholder="Mobile Number" required @error('phone') autofocus @enderror>
                             @error('phone')
                             <span class="text-danger" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -29,7 +29,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4 me-1 py-2">
-                            <input type="email" class="form-control" name="email" value="{{ old('email') ?: (auth()->user() ? auth()->user()->email : '') }}" placeholder="Email Address" autocomplete="email" @error('email') autofocus @enderror>
+                            <input type="email" class="form-control" name="email" value="{{ old('email') ?: (auth()->user() ? auth()->user()->email : '') }}" placeholder="Email Address" required autocomplete="email" @error('email') autofocus @enderror>
                             @error('email')
                             <span class="text-danger" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -86,7 +86,7 @@
                                     <div class="d-flex form-group mb-4 position-relative">
                                         <span class="square-icon"><i class="fa-solid fa-location-dot"></i></span>
                                         <select required name="state_id" id="state_id" class="form-select" aria-label="Default select example" @error('state_id') autofocus @enderror>
-                                            <option value="" selected disabled>Select State</option>
+                                            <option value="" selected disabled>Select City</option>
                                             @foreach($states as $state)
                                                 <option class="d-none" data-country="{{ $state['country_id'] }}" value="{{ $state['id'] }}" data-deliveryCharge="{{ $state['delivery_charge'] }}" {{ old('state_id') == $state['id'] ? 'selected' : '' }}>{{ $state['name'] }}</option>
                                             @endforeach

@@ -12,7 +12,7 @@
                 width:860px;height:40px;
                 @include mq("desktop"){width:350px;}
                 @include mq("desktop-wide"){width:410px;}
-                @include mq("large-container"){width:650px;}
+                @include mq("large-container"){width:30vw;}
                 @include radius(5px 0px 0px 5px);
                 background:transparent;
                 box-shadow:inset 0px 0px 7px -5px #2a2a2a;
@@ -89,10 +89,18 @@ nav{
                 color:#333333;
                 text-transform: capitalize;
                 @include transition(0.5s color);
-                font-weight:600;
-                @include mq("desktop"){padding: 0.8rem 0.2rem;@include fontSize(13px);}
+                font-weight:500;
+                text-transform: uppercase;
+                letter-spacing: 0.2px;
+                @include mq("desktop"){padding: 0.8rem 0.2rem;@include fontSize(13px); color:#ffffff;}
                 @include mq("desktop-wide"){padding: 0.8rem 0.4rem;@include fontSize(13px);}
-                @include mq("large-container"){ padding: 0.8rem 1rem;@include fontSize(17px);}
+                @include mq("large-container"){ padding: 0.8rem 1rem;@include fontSize(14px);}
+                &.red-bg{
+                     @include mq("desktop"){background: $primary;color:#ffffff;@include transition(0.5s color);}
+                     &:hover {
+                         @include mq("desktop"){background:darken( $primary,10%);color: #ffffff;}    
+                     }
+                }
                 &:before{
                     content: '';
                     display: block;
@@ -182,8 +190,8 @@ nav{
     h5{display:none;}
     ul{
         li{
-            @include mq('desktop'){  width: auto;flex: 0 0 auto;margin-top: 0rem;justify-content: start}
             width: 50%;flex: 0 0 50%;margin-top: 1rem;justify-content: center;
+            @include mq('desktop'){  width: auto;flex: 0 0 auto;margin-top: 0rem;justify-content: start}
         }
     }
     .service-icon{
@@ -195,4 +203,16 @@ nav{
             &.custom-product-warranty{@include fontSize(38px);}
         }
     }
+}
+
+.whatsapp-btn { 
+   position: fixed;
+    bottom: 10%;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
 }
