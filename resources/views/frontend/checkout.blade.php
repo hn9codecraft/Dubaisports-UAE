@@ -294,17 +294,45 @@
     });
 
     $('#state_id').on('change', function(){
+        var deliveryType = $('input[name="delivery_type"]:checked').val();
+        if(deliveryType === 'Pickup') {
+            return;
+        }
         var totalAmount = '{{ $totalAmount }}';
         console.log(totalAmount)
         if(parseFloat(totalAmount) < 350) {
-            var deliveryCharge = $(this).find(':selected').data('deliverycharge').toFixed(2);
-            $('#delivery_charge').val(deliveryCharge);
-            $('.deliveryCharge').html('<span>Delivery Charge</span> <span class="fw-semibold">AED '+ + deliveryCharge +'</span>');
-            totalAmount = (parseFloat(totalAmount) + parseFloat(deliveryCharge)).toFixed(2);
-            $('.totalAmount').html('AED ' + totalAmount);
-            $('#total_amount_submit').val(totalAmount);
+            var selectedOption = $(this).find(':selected');
+            var deliveryChargeVal = selectedOption.data('deliverycharge');
+            if (deliveryChargeVal !== undefined) {
+                var deliveryCharge = parseFloat(deliveryChargeVal).toFixed(2);
+                $('#delivery_charge').val(deliveryCharge);
+                $('.deliveryCharge').html('<span>Delivery Charge</span> <span class="fw-semibold">AED '+ deliveryCharge +'</span>');
+                totalAmount = (parseFloat(totalAmount) + parseFloat(deliveryCharge)).toFixed(2);
+                $('.totalAmount').html('AED ' + totalAmount);
+                $('#total_amount_submit').val(totalAmount);
+            }
         }
-    }).trigger();
+    });
 
+    function handleDeliveryTypeChange() {
+        var deliveryType = $('input[name="delivery_type"]:checked').val();
+        if (deliveryType === 'Pickup') {
+            $('#myaddress input, #myaddress select').prop('required', false);
+            $('#delivery_charge').val(0);
+            $('.deliveryCharge').html('<span>Delivery Charge</span> <span class="fw-semibold">AED 0.00</span>');
+            var baseTotal = parseFloat('{{ $totalAmount }}').toFixed(2);
+            $('.totalAmount').html('AED ' + baseTotal);
+            $('#total_amount_submit').val(baseTotal);
+        } else {
+            $('#myaddress input, #myaddress select').prop('required', true);
+            $('#state_id').trigger('change');
+        }
+    }
+
+    $('input[name="delivery_type"]').on('change', function() {
+        handleDeliveryTypeChange();
+    });
+
+    handleDeliveryTypeChange();
 </script>
 @stop

@@ -37,30 +37,29 @@ class CheckoutController extends Controller
         $discountDetails = json_decode(\Session::get('cart_discount'), true);
 
         if(!\Auth::user()) {
-            $cart = \Session::get('cart');
+            $cart = \Session::get('cart') ?? [];
         } else {
             $userCart = Cart::where('user_id', \Auth::user()->id)->first();
-            $cart = json_decode($userCart['products'], true);
-        }
-        if($cart) {
-            $subTotal = array_sum(array_column($cart, 'productDiscountPrice'));
-            $totalAmount = array_sum(array_column($cart, 'productDiscountPrice'));
-            if($discountDetails) {
-                $totalAmount -= $discountDetails['discount'];
-                // $vat = ($totalAmount * 5) / 100; 
-                $vat = 0;
-                $totalAmount += $vat;
-                $discountDetails['vat'] = $vat;
-                \Session::put('cart_discount', json_encode($discountDetails));
-            } else {
-                // $vat = ($totalAmount * 5) / 100; 
-                $vat = 0;
-                $totalAmount += $vat;
-            }
+            $cart = ($userCart && !empty($userCart['products'])) ? json_decode($userCart['products'], true) : [];
         }
 
         if(empty($cart)) {
             return redirect()->route('home');
+        }
+
+        $subTotal = array_sum(array_column($cart, 'productDiscountPrice'));
+        $totalAmount = array_sum(array_column($cart, 'productDiscountPrice'));
+        if($discountDetails) {
+            $totalAmount -= $discountDetails['discount'];
+            // $vat = ($totalAmount * 5) / 100; 
+            $vat = 0;
+            $totalAmount += $vat;
+            $discountDetails['vat'] = $vat;
+            \Session::put('cart_discount', json_encode($discountDetails));
+        } else {
+            // $vat = ($totalAmount * 5) / 100; 
+            $vat = 0;
+            $totalAmount += $vat;
         }
 
         return view('frontend.checkout', compact('cart', 'subTotal', 'totalAmount', 'countries', 'states', 'discountDetails', 'vat'));
@@ -136,8 +135,12 @@ class CheckoutController extends Controller
                 \Auth::loginUsingId($user['id']);
             } else {
                 $user = \Auth::user();
-                $cart = Cart::where('user_id', \Auth::user()->id)->first();
-                $cart = json_decode($cart['products'], true);
+                $userCart = Cart::where('user_id', \Auth::user()->id)->first();
+                $cart = ($userCart && !empty($userCart['products'])) ? json_decode($userCart['products'], true) : [];
+            }
+
+            if (empty($cart)) {
+                return redirect()->route('home');
             }
 
             // $cartTotalAmount = array_sum(array_column($cart, 'price'));
@@ -386,14 +389,14 @@ class CheckoutController extends Controller
                     'shipping_note' => !empty($data['shipping_information']) ? $data['shipping_information'] : "",
                     'discount' => json_encode($discountDetails),
                     'address' => json_encode([
-                        'address_line_1' => !empty($data['address_line_1']) ? : "",
-                        'address_line_2' => !empty($data['address_line_2']) ? : "",
-                        'country_id' => $data['country_id'],
-                        'state_id' => $data['state_id'],
-                        'city' => $data['city'],
+                        'address_line_1' => $data['address_line_1'] ?? "",
+                        'address_line_2' => $data['address_line_2'] ?? "",
+                        'country_id' => $data['country_id'] ?? null,
+                        'state_id' => $data['state_id'] ?? null,
+                        'city' => $data['city'] ?? "",
                     ]),
-                    'delivery_charge' => $data['delivery_charge'],
-                    'vat' => $data['vat'],
+                    'delivery_charge' => $data['delivery_charge'] ?? 0,
+                    'vat' => $data['vat'] ?? 0,
                 ]);
                 Payment::create([
                     'user_id' => $user['id'],

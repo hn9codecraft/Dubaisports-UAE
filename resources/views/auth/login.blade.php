@@ -105,6 +105,12 @@
               </div>
           @endif
           <button type="submit" class="btn btn-info mt-3 px-4">Login </button>
+          <div class="my-3">
+              <span class="text-white-50 small">OR</span>
+          </div>
+          <a href="{{ route('auth.google') }}" class="btn btn-light w-100 py-2 mb-2 d-flex align-items-center justify-content-center fw-semibold text-dark rounded shadow-sm">
+              <i class="fab fa-google me-2 text-danger"></i> Sign in with Google
+          </a>
           <a href="{{ route('password.request') }}" class="btn btn-link d-block text-center mb-2">Forget Password</a>
         </form>
         <div class="content text-center">

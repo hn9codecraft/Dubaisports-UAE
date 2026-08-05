@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
 
+// Google OAuth Routes
+Route::get('auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/wishlist', [App\Http\Controllers\HomeController::class, 'wishlist'])->name('wishlist');
 Route::get('/wishlist/delete/{productId}', [App\Http\Controllers\HomeController::class, 'removeWishlistItem'])->name('removeWishlistItem');

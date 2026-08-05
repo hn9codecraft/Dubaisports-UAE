@@ -11,11 +11,17 @@ The migration files created are:
 * database/migrations/2026_07_07_183407_create_brands_table.php
 * database/migrations/2026_07_07_183409_add_brand_and_offers_to_products_table.php
 * database/migrations/2026_07_07_183411_modify_vat_in_orders_table.php
+* database/migrations/2026_08_05_183420_add_google_id_and_avatar_to_users_table.php
 
 All migrations are designed to run safely (checking if tables or columns exist first).
 
 2. MANUAL DATABASE CHANGES (RAW SQL ALTERNATIVE)
 ------------------------------------------------
+-- Add "google_id" and "avatar" columns to users table
+ALTER TABLE users ADD COLUMN google_id VARCHAR(255) NULL AFTER email;
+ALTER TABLE users ADD COLUMN avatar VARCHAR(255) NULL AFTER google_id;
+ALTER TABLE users ADD INDEX idx_users_google_id (google_id);
+
 -- Add "Combo Offer" column to products table
 ALTER TABLE products ADD COLUMN combo_offer ENUM('0', '1') DEFAULT '0' AFTER popular_product;
 
