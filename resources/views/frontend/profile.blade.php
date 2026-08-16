@@ -38,7 +38,7 @@
                                 @if($user->avatar)
                                     <img src="{{ asset($user->avatar) }}" id="avatar-preview" alt="Profile Image" class="img-fluid rounded-circle border border-secondary shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
                                 @else
-                                    <img src="" id="avatar-preview" alt="Profile Image" class="img-fluid rounded-circle border border-secondary shadow-sm" style="width: 120px; height: 120px; object-fit: cover; display: none;">
+                                    <img src="" id="avatar-preview" alt="Profile Image" class="img-fluid rounded-circle border border-secondary shadow-sm d-none" style="width: 120px; height: 120px; object-fit: cover;">
                                     <div id="avatar-placeholder" class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto text-white" style="width: 120px; height: 120px; font-size: 3rem;">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
@@ -109,11 +109,12 @@
                 
                 if (previewImg) {
                     previewImg.src = e.target.result;
-                    previewImg.style.display = 'inline-block';
+                    previewImg.classList.remove('d-none');
                 }
                 
                 if (placeholder) {
-                    placeholder.style.display = 'none';
+                    placeholder.classList.remove('d-flex');
+                    placeholder.classList.add('d-none');
                 }
             }
             reader.readAsDataURL(file);
