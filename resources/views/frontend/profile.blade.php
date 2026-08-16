@@ -74,6 +74,59 @@
                             </div>
                         </div>
                         
+                        <h4 class="mt-5 mb-4 pb-2 border-bottom fw-bold">Delivery Address</h4>
+                        <p class="text-muted small mb-3">Manage your default shipping address.</p>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="address_line_1" class="form-label fw-semibold">Address Line 1</label>
+                                <input type="text" class="form-control bg-light" id="address_line_1" name="address_line_1" value="{{ old('address_line_1', $address->address_line_1 ?? '') }}" placeholder="Street address, P.O. box, company name, c/o">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="address_line_2" class="form-label fw-semibold">Address Line 2 (Optional)</label>
+                                <input type="text" class="form-control bg-light" id="address_line_2" name="address_line_2" value="{{ old('address_line_2', $address->address_line_2 ?? '') }}" placeholder="Apartment, suite, unit, building, floor, etc.">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="country_id" class="form-label fw-semibold">Country</label>
+                                <select class="form-control bg-light form-select" id="country_id" name="country_id">
+                                    <option value="">Select Country</option>
+                                    @foreach($countries as $country)
+                                        <option value="{{ $country['id'] }}" {{ (old('country_id', $address->country_id ?? '') == $country['id']) ? 'selected' : '' }}>
+                                            {{ $country['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label for="state_id" class="form-label fw-semibold">State / Province</label>
+                                <select class="form-control bg-light form-select" id="state_id" name="state_id">
+                                    <option value="">Select State</option>
+                                    @foreach($states as $state)
+                                        <option value="{{ $state['id'] }}" {{ (old('state_id', $address->state_id ?? '') == $state['id']) ? 'selected' : '' }}>
+                                            {{ $state['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="city" class="form-label fw-semibold">City</label>
+                                <input type="text" class="form-control bg-light" id="city" name="city" value="{{ old('city', $address->city ?? '') }}">
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label for="pincode" class="form-label fw-semibold">ZIP / Postal Code</label>
+                                <input type="text" class="form-control bg-light" id="pincode" name="pincode" value="{{ old('pincode', $address->pincode ?? '') }}">
+                            </div>
+                        </div>
+                        
                         <h4 class="mt-5 mb-4 pb-2 border-bottom fw-bold">Change Password</h4>
                         <p class="text-muted small mb-3">Leave blank if you do not want to change your password.</p>
                         
