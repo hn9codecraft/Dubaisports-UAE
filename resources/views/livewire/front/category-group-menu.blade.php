@@ -83,11 +83,7 @@
                     <a class="nav-link" href="/{{$categoryGroup['slug']}}" aria-expanded="false">{{ $categoryGroup['title'] }}</a>
                     @endif
                     @if($categoryGroup['categories'])
-<<<<<<< Updated upstream
                     <ul class="dropdown-menu bg-light position-static w-100 mb-0 py-0">
-=======
-                    <ul class="dropdown-menu position-static w-100 mb-0 py-0">
->>>>>>> Stashed changes
                         @foreach($categoryGroup['categories'] as $category)
                         <li class="nav-item">
                             <a class="d-block px-3 py-2 border-bottom" href="{{ route('front.category.products', [$categoryGroup['slug'], $category['slug']]) }}">{{ $category['title'] }}</a>
