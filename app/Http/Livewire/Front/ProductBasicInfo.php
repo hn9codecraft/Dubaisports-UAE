@@ -14,9 +14,7 @@ class ProductBasicInfo extends Component
 
     public function mount($selectedVariantSlug = null)
     {
-        $creditStock = Stock::where(['product_id' => $this->product['id'], 'type' => 'Credit'])->sum('qty');
-        $debitStock = Stock::where(['product_id' => $this->product['id'], 'type' => 'Debit'])->sum('qty');
-        $this->productStock = $creditStock - $debitStock;
+        $this->additionalPriceEnabled = $this->product['additional_price_enable'];
         $this->additionalPriceEnabled = $this->product['additional_price_enable'];
         $this->additionalPriceList = json_decode($this->product['price_list'], true) ?? [];
         $this->brand = !empty($this->product['brand_id']) ? \App\Models\Brand::find($this->product['brand_id']) : null;
@@ -35,6 +33,31 @@ class ProductBasicInfo extends Component
         }
 
         $this->productPrice();
+        $this->updateStockDisplay();
+    }
+
+    public function updateStockDisplay() {
+        $query = Stock::where('product_id', $this->product['id']);
+        
+        if ($this->additionalPriceEnabled == '1' && !empty($this->additionalPriceList)) {
+            $option = $this->additionalPriceList[$this->selectedPriceOptionId] ?? reset($this->additionalPriceList);
+            $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+            $query->where(function ($q) use ($variantSlug) {
+                $q->where('variant_slug', $variantSlug)
+                  ->orWhereNull('variant_slug');
+            });
+        } else {
+            $query->whereNull('variant_slug');
+        }
+
+        $creditStock = (clone $query)->where('type', 'Credit')->sum('qty');
+        $debitStock = (clone $query)->where('type', 'Debit')->sum('qty');
+        $this->productStock = $creditStock - $debitStock;
+        
+        if ($this->productQty > $this->productStock) {
+            $this->productQty = max(1, $this->productStock);
+            $this->productPrice();
+        }
     }
 
     public function incrementQty()
@@ -90,6 +113,7 @@ class ProductBasicInfo extends Component
                 'variantSlug' => $variantSlug
             ]);
         }
+        $this->updateStockDisplay();
     }
 
     public function addToCart()

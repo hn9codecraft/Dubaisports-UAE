@@ -94,8 +94,13 @@
             @endguest
             <ul class="dropdown-menu ms-3 mt-1 shadow">
                 <li class="p-0 border-bottom">
+                    <a href="{{ route('front.customer.profile') }}" class="d-block py-2 px-1">
+                        <i class="fa-solid fa-user mx-2"></i><span class="link-content d-xl-inline-block d-none">My Profile</span>
+                    </a>
+                </li>
+                <li class="p-0 border-bottom">
                     <a href="/orders" class="d-block py-2 px-1">
-                        <i class="fa-solid fa-right-from-bracket mx-2"></i><span class="link-content d-xl-inline-block d-none">My Order</span>
+                        <i class="fa-solid fa-box-open mx-2"></i><span class="link-content d-xl-inline-block d-none">My Orders</span>
                     </a>
                 </li>
                 <li class="p-0">

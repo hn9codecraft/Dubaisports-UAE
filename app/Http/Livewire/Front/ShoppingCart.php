@@ -28,8 +28,28 @@ class ShoppingCart extends Component
     public function getStock() {
         if($this->carts) {
             foreach ($this->carts as $key => $value) {
-                $creditStock = Stock::where(['product_id' => $value['product']['id'], 'type' => 'Credit'])->sum('qty');
-                $debitStock = Stock::where(['product_id' => $value['product']['id'], 'type' => 'Debit'])->sum('qty');
+                $pId = $value['product']['id'];
+                $query = Stock::where('product_id', $pId);
+                
+                if ($value['product']['additional_price_enable'] == '1') {
+                    $priceList = is_array($value['product']['price_list']) ? $value['product']['price_list'] : json_decode($value['product']['price_list'], true) ?? [];
+                    $selectedId = $value['selectedPriceOptionId'] ?? 0;
+                    $option = $priceList[$selectedId] ?? null;
+                    if ($option) {
+                        $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+                        $query->where(function ($q) use ($variantSlug) {
+                            $q->where('variant_slug', $variantSlug)
+                              ->orWhereNull('variant_slug');
+                        });
+                    } else {
+                        $query->whereNull('variant_slug');
+                    }
+                } else {
+                    $query->whereNull('variant_slug');
+                }
+
+                $creditStock = (clone $query)->where('type', 'Credit')->sum('qty');
+                $debitStock = (clone $query)->where('type', 'Debit')->sum('qty');
                 $this->carts[$key]['stocks'] = $creditStock - $debitStock;
             }
         }

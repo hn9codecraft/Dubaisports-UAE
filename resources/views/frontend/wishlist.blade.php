@@ -3,11 +3,14 @@
 <div class="spacing-y">
 <div class="container">
     <div class="page-header">
-        <h2 class="mb-0 text-center">Wishlist <span class="text-primary">@if($products) List @else is empty. @endif</span></h2>
+        <h2 class="mb-5 text-center">Wishlist <span class="text-primary">@if($products) List @else is empty. @endif</span></h2>
     </div>
-    <div class="row listing-product">
-        @foreach($products as $product)
-        <div class="col-md-3 mb-4">
+    <div class="row">
+        @include('frontend.layouts.customer_sidebar')
+        <div class="col-md-9">
+            <div class="row listing-product">
+                @foreach($products as $product)
+                <div class="col-md-4 mb-4">
             <div class="card position-relative">
                 <a href="{{ route('front.products.show',$product['id']) }}" class="product-img"><img src="{{ $product['main_image'] }}"
                         alt="produsct" class="card-img-top img-fluid p-2"></a>
@@ -26,7 +29,9 @@
                 </div>
             </div>
         </div>
-        @endforeach
+                @endforeach
+            </div>
+        </div>
     </div>
 </div>
 </div>

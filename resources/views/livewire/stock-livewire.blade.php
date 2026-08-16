@@ -1,10 +1,10 @@
 <div>
     <div class="box box-info">
         <div class="box-body">
-            <div class="form-group">
+            <div class="form-group" wire:ignore>
                 <label class="col-sm-2 control-label">Product <span class="text-danger">*</span></label>
                 <div class="col-sm-8">
-                    <select class="form-control" wire:model="productId" wire:change="getReport" class="mt-1" required>
+                    <select class="form-control" id="stockProductSelect" required>
                         <option value="">Select Product</option>
                         @foreach($products as $key => $product)
                         <option value="{{ $key }}">{{ $product }}</option>
@@ -52,6 +52,7 @@
                 <thead>
                     <tr class="btn-primary">
                         <th>Product</th>
+                        <th>Variant (Slug)</th>
                         <th>Type</th>
                         <th>Qty</th>
                         <th>Note</th>
@@ -61,6 +62,7 @@
                     @foreach($histories as $history)
                     <tr>
                         <td>{{ $history['product']['title'] }}</td>
+                        <td>{{ $history['variant_slug'] ?? '-' }}</td>
                         <td>{{ $history['type'] }}</td>
                         <td>{{ $history['qty'] }}</td>
                         <td>{{ $history['note'] }}</td>
@@ -70,6 +72,7 @@
                 <tfoot>
                     <tr class="btn-primary">
                         <th>Product</th>
+                        <th>Variant (Slug)</th>
                         <th>Type</th>
                         <th>Qty</th>
                         <th>Note</th>
@@ -79,4 +82,16 @@
         </div>
     </div>
     @endif
+    <script>
+        document.addEventListener('livewire:load', function () {
+            $('#stockProductSelect').select2({
+                width: '100%'
+            });
+            $('#stockProductSelect').on('change', function (e) {
+                var data = $(this).val();
+                @this.set('productId', data);
+                @this.call('getReport');
+            });
+        });
+    </script>
 </div>

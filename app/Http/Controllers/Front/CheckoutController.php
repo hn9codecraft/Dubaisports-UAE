@@ -408,8 +408,19 @@ class CheckoutController extends Controller
 
                 //--- Debit Product Stock
                 foreach ($cart as $key => $value) {
+                    $variantSlug = null;
+                    if (isset($value['product']['additional_price_enable']) && $value['product']['additional_price_enable'] == '1') {
+                        $priceList = is_array($value['product']['price_list']) ? $value['product']['price_list'] : json_decode($value['product']['price_list'], true) ?? [];
+                        $selectedId = $value['selectedPriceOptionId'] ?? 0;
+                        $option = $priceList[$selectedId] ?? null;
+                        if ($option) {
+                            $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+                        }
+                    }
+
                     Stock::create([
                         'product_id' => $value['product']['id'],
+                        'variant_slug' => $variantSlug,
                         'type' => 'Debit',
                         'qty' => $value['quantity'],
                         'note' => 'Order #'.$order['id']
@@ -524,8 +535,19 @@ class CheckoutController extends Controller
 
             //--- Debit Product Stock
             foreach ($products as $key => $value) {
+                $variantSlug = null;
+                if (isset($value['product']['additional_price_enable']) && $value['product']['additional_price_enable'] == '1') {
+                    $priceList = is_array($value['product']['price_list']) ? $value['product']['price_list'] : json_decode($value['product']['price_list'], true) ?? [];
+                    $selectedId = $value['selectedPriceOptionId'] ?? 0;
+                    $option = $priceList[$selectedId] ?? null;
+                    if ($option) {
+                        $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+                    }
+                }
+
                 Stock::create([
                     'product_id' => $value['product']['id'],
+                    'variant_slug' => $variantSlug,
                     'type' => 'Debit',
                     'qty' => $value['quantity'],
                     'note' => 'Order #'.$order['id']
@@ -616,8 +638,19 @@ class CheckoutController extends Controller
 
                 //--- Debit Product Stock
                 foreach ($products as $key => $value) {
+                    $variantSlug = null;
+                    if (isset($value['product']['additional_price_enable']) && $value['product']['additional_price_enable'] == '1') {
+                        $priceList = is_array($value['product']['price_list']) ? $value['product']['price_list'] : json_decode($value['product']['price_list'], true) ?? [];
+                        $selectedId = $value['selectedPriceOptionId'] ?? 0;
+                        $option = $priceList[$selectedId] ?? null;
+                        if ($option) {
+                            $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+                        }
+                    }
+
                     Stock::create([
                         'product_id' => $value['product']['id'],
+                        'variant_slug' => $variantSlug,
                         'type' => 'Debit',
                         'qty' => $value['quantity'],
                         'note' => 'Order #'.$order['id']

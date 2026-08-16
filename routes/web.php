@@ -31,6 +31,9 @@ Route::group(['as' => 'front.', 'namespace' => 'Front',  'middleware' => []], fu
     Route::resource('/checkout', 'CheckoutController');
     Route::resource('/orders', 'OrderController');
     
+    Route::get('/profile', 'ProfileController@index')->name('customer.profile');
+    Route::post('/profile', 'ProfileController@update')->name('customer.profile.update');
+    
     Route::get('/quote', 'CMSPageController@getQuoteForm')->name('quote.get');
     Route::post('/quote', 'CMSPageController@storeQuoteForm')->name('quote.store');
 
