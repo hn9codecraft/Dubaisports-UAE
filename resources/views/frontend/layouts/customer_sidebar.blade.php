@@ -1,7 +1,7 @@
-<div class="col-md-3 mb-4">
-    <div class="card border border-secondary shadow-sm rounded">
+<div class="col-md-3 mb-4 my-account-list">
+    <div class="card border border-lgiht shadow-sm rounded">
         <div class="card-body p-0">
-            <div class="list-group list-group-flush rounded">
+            <div class="list-group list-group-flush rounded overflow-hidden">
                 <a href="{{ route('front.customer.profile') }}" class="list-group-item list-group-item-action {{ request()->routeIs('front.customer.profile') ? 'bg-primary text-white' : '' }}">
                     <i class="fa-solid fa-user me-2"></i> My Profile
                 </a>

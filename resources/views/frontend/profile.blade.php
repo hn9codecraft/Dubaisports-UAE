@@ -10,7 +10,7 @@
             @include('frontend.layouts.customer_sidebar')
             
             <div class="col-md-9">
-                <div class="card border border-secondary shadow-sm rounded p-4">
+                <div class="card border border-light shadow-sm rounded p-4">
                     <h4 class="mb-4 pb-2 border-bottom fw-bold">Personal Information</h4>
                     
                     @if(session('success'))
@@ -142,7 +142,7 @@
                         </div>
                         
                         <div class="text-end mt-4">
-                            <button type="submit" class="btn btn-primary px-5 fw-bold py-2">Update Profile</button>
+                            <button type="submit" class="btn btn-primary px-5 py-2">Update Profile</button>
                         </div>
                     </form>
                 </div>

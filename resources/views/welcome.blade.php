@@ -112,7 +112,7 @@
         <livewire:front.home-product-list :type="'new'"/>
     </div>
 </div>
-<div id="ShopByBrand" class="shop-by-brand bg-light spacing-y">
+<div id="ShopByBrand" class="shop-by-brand bg-light spacing-y d-none">
     <div class="container">
         <div class="page-header">
             <h2 class="mb-0 text-center">Shop By <span class="text-primary">Brands</span></h2>

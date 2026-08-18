@@ -115,7 +115,7 @@
 
         </li>
         @auth
-        <li class="d-lg-inline-block d-none"> <a href="{{ route('wishlist') }}" class="d-flex position-relative border-end border-secondary"><span
+        <li class=" d-none"> <a href="{{ route('wishlist') }}" class="d-flex position-relative border-end border-secondary"><span
                     class="custom-icon custom-wishlistsvg me-2"><span class="path1"></span><span
                         class="path2"></span></span><span class="link-content d-xl-inline-block d-none">Wishlist</span></a>
         </li>

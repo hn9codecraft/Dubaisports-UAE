@@ -102,6 +102,8 @@
                             <a href="https://dubaisportsuae.com/flooring/gym-flooring">Gym Flooring</a>
                         </li>
                     </ul>
+                    <h5>Google Review</h5>
+                    <a href="https://www.google.com/maps/place/Dubai+Sports+LLC/@25.2745421,55.3821206,17z/data=!4m8!3m7!1s0x3e5f5c3b82ade7f3:0x557db9161c4c0165!8m2!3d25.2745421!4d55.3821206!9m1!1b1!16s%2Fg%2F11csbdch_1?entry=ttu&g_ep=EgoyMDI2MDgxMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="custom-review align-items-center gap-2"><img src="{{ env('APP_URL').'front/images/rating-star.svg' }}" id="rating-star" alt="Profile Image" class="img-fluid " >4.9</a>
                 </div>
                 <div class="col-md-6 col-lg-3 mb-3">
                     <h5><i class="fa-solid fa-location-dot me-2"></i> Showroom</h5>
@@ -115,6 +117,110 @@
                                 map</a></iframe></div> -->
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="ShopByBrand" class="shop-by-brand">
+        <div class="container">
+            <div class="brands d-flex flex-wrap align-items-center">
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/Fit-Plus.png' }}" alt="brands" class="img-fluid">
+                </div>
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/Spirit.png' }}" alt="brands" class="img-fluid">
+                </div>
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/California.png' }}" alt="brands" class="img-fluid">
+                </div>
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/PowerPlus.png' }}" alt="brands" class="img-fluid">
+                </div>
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/power.png' }}" alt="brands" class="img-fluid">
+                </div>
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/Florex.png' }}" alt="brands" class="img-fluid">
+                </div>
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/Woodpack.png' }}" alt="brands" class="img-fluid">
+                </div>
+                <div class="client-logo">
+                    <img src="{{ env('APP_URL').'front/images/brands/Super-Gym.png' }}" alt="brands" class="img-fluid">
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"><img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/fitplus.png' }}" alt="fit plus"></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"> <img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/supergym.png' }}" alt="super gym"></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"> <img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/ivanko.png' }}" alt="ivanko"></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"> <img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/florex.png' }}" alt="florex"></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"> <img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/spirit.png' }}" alt="spirit"></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"><img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/fitplus.png'}}" alt=""></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"> <img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/fitplus.png' }}" alt=""></span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="box-brand bg-white border text-center">
+                        <a href="#" class="d-block text-center">
+                            <span class="brand position-relative d-block">
+                                <span class="brand-logo mx-auto"> <img class="img-fluid" src="{{ env('APP_URL').'front/images/brands/fitplus.png' }}" alt=""></span>
+                                </span>
+                        </a>
+                    </div>
+                </div>
+            </div> -->
         </div>
     </div>
     <div class="footer_bottom mt-4">
