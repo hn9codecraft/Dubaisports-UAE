@@ -121,6 +121,7 @@
     </div>
     <div id="ShopByBrand" class="shop-by-brand">
         <div class="container">
+              <h5 class="text-primary text-center" style="font-family:'Roboto Slab'"> Authorised Dealers</h5>
             <div class="brands d-flex flex-wrap align-items-center">
                 <div class="client-logo">
                     <img src="{{ env('APP_URL').'front/images/brands/Fit-Plus.png' }}" alt="brands" class="img-fluid">
