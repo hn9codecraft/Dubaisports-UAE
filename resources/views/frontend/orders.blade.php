@@ -16,7 +16,7 @@
                     
                     $statusColor = 'bg-secondary';
                     if ($order['status'] == 'In Process') $statusColor = 'bg-warning text-dark';
-                    if ($order['status'] == 'Shipped') $statusColor = 'bg-info text-dark';
+                    if ($order['status'] == 'Shipped') $statusColor = 'bg-info text-white';
                     if ($order['status'] == 'Delivered') $statusColor = 'bg-success';
                 @endphp
                 <div class="order-card p-4 mb-4 bg-white border border-secondary shadow-sm rounded">

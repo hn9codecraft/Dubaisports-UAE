@@ -191,8 +191,8 @@
                                     <li> Your personal details and payment information is fully encrypted and processed.</li>
                                 </ul>
                             </div>
-                        <input class="form-check-input" type="radio" name="payment_type" value="COD" id="flexRadioDefault2" checked>
-                        <label class="form-check-label" for="flexRadioDefault2">
+                        <input class="form-check-input d-none" type="radio" name="payment_type" value="COD" id="flexRadioDefault2">
+                        <label class="form-check-label d-none" for="flexRadioDefault2">
                             <i class="fa-solid fa-hand-holding-dollar fa-lg me-2"></i>  Cash | Card Payment at Delivery
                         </label>
                         <!-- <input class="form-check-input" type="radio" name="payment_type" value="Apple Pay" @if(old('payment_type') == 'Apple Pay') checked @endif id="flexRadioDefault3" >

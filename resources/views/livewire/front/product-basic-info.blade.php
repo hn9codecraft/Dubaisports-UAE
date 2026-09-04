@@ -97,12 +97,12 @@
             <span class="text-muted fw-bold me-2" style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1;">Brand:</span>
             <a href="{{ $brand->link ?? '#' }}" target="_blank" class="d-inline-flex align-items-center text-decoration-none me-2">
                 @if($brand->image)
-                    <img src="{{ $brand->image }}" alt="{{ $brand->name }}" style="height: 35px; object-fit: contain; background: white; padding: 2px; border: 1px solid #ddd; border-radius: 4px;" class="me-2">
+                    <img src="{{ $brand->image }}" alt="{{ $brand->name }}" style="height: 100px; object-fit: contain; background: white; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" class="me-2">
                 @endif
-                <strong class="text-danger fs-5 hover-underline" style="color: #dc3545 !important; line-height: 1;">{{ $brand->name }}</strong>
+                <strong class="text-danger fs-5 hover-underline d-none" style="color: #dc3545 !important; line-height: 1;">{{ $brand->name }}</strong>
             </a>
             @if($brand->description)
-                <a href="javascript:void(0)" class="text-danger d-inline-flex align-items-center justify-content-center" 
+                <a href="javascript:void(0)" class="text-danger d-inline-flex align-items-center justify-content-center d-none" 
                    data-bs-toggle="popover" 
                    data-bs-trigger="focus" 
                    data-bs-placement="top" 

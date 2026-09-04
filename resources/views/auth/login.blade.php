@@ -89,7 +89,7 @@
            <span class="square-icon"> <i class="fas fa-lock"></i></span>
             <input id="password" type="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
             @error('password')
-                <span class="invalid-feedback" role="alert">
+                <span class="invalid-feedback text-primary" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
@@ -104,14 +104,16 @@
                   @enderror
               </div>
           @endif
-          <button type="submit" class="btn btn-info mt-3 px-4">Login </button>
-          <div class="my-3">
-              <span class="text-white-50 small">OR</span>
+          <div class="d-flex g-5 align-items-center justify-content-center mt-3"> 
+            <button type="submit" class="btn btn-info px-4">Login </button>
+            <div class="my-3 px-3">
+                <span class="small">OR</span>
+            </div>
+            <a href="{{ route('auth.google') }}" class="btn btn-light py-2  d-flex align-items-center justify-content-center fw-semibold text-dark rounded shadow-sm">
+                <i class="fab fa-google me-2 text-danger"></i> Sign in with Google
+            </a>
           </div>
-          <a href="{{ route('auth.google') }}" class="btn btn-light w-100 py-2 mb-2 d-flex align-items-center justify-content-center fw-semibold text-dark rounded shadow-sm">
-              <i class="fab fa-google me-2 text-danger"></i> Sign in with Google
-          </a>
-          <a href="{{ route('password.request') }}" class="btn btn-link d-block text-center mb-2">Forget Password</a>
+          <a href="{{ route('password.request') }}" class="btn btn-link d-block text-center">Forget Password</a>
         </form>
         <div class="content text-center">
           <h4 class="text-white">New Here ?</h4>
