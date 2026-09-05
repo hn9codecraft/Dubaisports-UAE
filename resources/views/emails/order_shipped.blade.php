@@ -6,16 +6,16 @@
     <style>
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .header { background-color: #0d6efd; padding: 30px 20px; text-align: center; color: white; }
+        .header { background-color: #ed2124; padding: 30px 20px; text-align: center; color: white; }
         .header h1 { margin: 0; font-size: 24px; }
         .content { padding: 30px; }
-        .content h2 { color: #0d6efd; margin-top: 0; }
+        .content h2 { color: #ed2124; margin-top: 0; }
         .content p { line-height: 1.6; font-size: 16px; }
         .order-details { background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 4px; padding: 15px; margin: 20px 0; }
         .order-details ul { list-style: none; padding: 0; margin: 0; }
         .order-details li { padding: 8px 0; border-bottom: 1px solid #e9ecef; }
         .order-details li:last-child { border-bottom: none; }
-        .btn { display: inline-block; background-color: #0d6efd; color: #ffffff; text-decoration: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; margin-top: 20px; text-align: center; }
+        .btn { display: inline-block; background-color: #ed2124; color: #ffffff; text-decoration: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; margin-top: 20px; text-align: center; }
         .footer { background-color: #f1f3f5; padding: 20px; text-align: center; font-size: 14px; color: #6c757d; }
     </style>
 </head>
@@ -55,7 +55,7 @@
             <p>You can track your order status by visiting your account.</p>
             
             <div style="text-align: center;">
-                <a href="{{ route('front.orders.index') }}" style="display: inline-block; background-color: #0d6efd; color: #ffffff !important; text-decoration: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; margin-top: 20px; text-align: center;">View My Orders</a>
+                <a href="{{ route('front.orders.index') }}" style="display: inline-block; background-color: #ed2124; color: #ffffff !important; text-decoration: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; margin-top: 20px; text-align: center;">View My Orders</a>
             </div>
         </div>
         
