@@ -86,4 +86,15 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+    protected function registered(\Illuminate\Http\Request $request, $user)
+    {
+        $sessionCart = \Session::get('cart');
+        if (!empty($sessionCart)) {
+            \App\Models\Cart::updateOrCreate(
+                ['user_id' => $user->id],
+                ['products' => json_encode($sessionCart)]
+            );
+            \Session::forget('cart');
+        }
+    }
 }

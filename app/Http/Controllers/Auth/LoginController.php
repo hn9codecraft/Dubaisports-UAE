@@ -77,4 +77,26 @@ class LoginController extends Controller
             }
         }
     }
+    protected function authenticated(Request $request, $user)
+    {
+        $sessionCart = \Session::get('cart');
+        if (!empty($sessionCart)) {
+            $dbCart = \App\Models\Cart::where('user_id', $user->id)->first();
+            $mergedCart = $sessionCart;
+            
+            if ($dbCart && !empty($dbCart->products)) {
+                $existingProducts = json_decode($dbCart->products, true) ?? [];
+                foreach ($sessionCart as $key => $item) {
+                    $existingProducts[$key] = $item;
+                }
+                $mergedCart = $existingProducts;
+            }
+
+            \App\Models\Cart::updateOrCreate(
+                ['user_id' => $user->id],
+                ['products' => json_encode($mergedCart)]
+            );
+            \Session::forget('cart');
+        }
+    }
 }

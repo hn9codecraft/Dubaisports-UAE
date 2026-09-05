@@ -23,6 +23,12 @@ use App\Models\NomodCheckoutTransaction;
 
 class CheckoutController extends Controller
 {
+    public function __construct()
+    {
+        // Require login for checkout page and form submission
+        $this->middleware('auth')->only(['index', 'store']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -113,31 +119,9 @@ class CheckoutController extends Controller
             //     ]);
             // }
 
-            if(!\Auth::user()) {
-                $user = User::where('email', $data['email'])->first();
-                if(!$user) {
-                    $user = User::create([
-                        'first_name' => $data['first_name'],
-                        'last_name' => $data['first_name'],
-                        'phone' => $data['phone'],
-                        'email' => $data['email'],
-                        'password' => \Hash::make('123456'),
-                    ]);
-                }
-                $cart = \Session::get('cart');
-                
-                Cart::updateOrCreate([
-                    'user_id' => $user['id']
-                ],[
-                    'user_id' => $user['id'],
-                    'products' => json_encode($cart)
-                ]);
-                \Auth::loginUsingId($user['id']);
-            } else {
-                $user = \Auth::user();
-                $userCart = Cart::where('user_id', \Auth::user()->id)->first();
-                $cart = ($userCart && !empty($userCart['products'])) ? json_decode($userCart['products'], true) : [];
-            }
+            $user = \Auth::user();
+            $userCart = Cart::where('user_id', \Auth::user()->id)->first();
+            $cart = ($userCart && !empty($userCart['products'])) ? json_decode($userCart['products'], true) : [];
 
             if (empty($cart)) {
                 return redirect()->route('home');
@@ -339,32 +323,37 @@ class CheckoutController extends Controller
  
 
                 try {
-                    // Call the service to create checkout
+                    // 1. Create transaction in database FIRST to get the ID
+                    $transaction = NomodCheckoutTransaction::create([
+                        'user_id'          => $user['id'],
+                        'reference_id'     => 'REF_' . time(),
+                        'amount'           => $cartTotalAmount,
+                        'currency'         => 'AED',
+                        'status'           => 'created',
+                        'checkout_details' => $data,
+                        'cart_products'    => $cart,
+                    ]);
+
+                    // 2. Call the service to create checkout
                     $checkoutResponse = NomodService::createCheckout([
-                        'reference_id'  => 'REF_' . time(),
+                        'reference_id'  => $transaction->reference_id,
                         'amount'        => (string) $cartTotalAmount,
                         'currency'      => 'AED',
                         'items'         => $items,
-                        'success_url'   => route('front.checkout.nomod.success'),
+                        'success_url'   => route('front.checkout.nomod.success', ['transactionId' => $transaction->id]),
                         'failure_url'   => route('home'),
                         'cancelled_url' => route('home'),
                     ]);
 
- 
                     if (!empty($checkoutResponse['id']) && !empty($checkoutResponse['url'])) {
-                        // Store response in the database
-                        $transaction = NomodCheckoutTransaction::create([
-                            'reference_id'     => $checkoutResponse['reference_id'] ?? 'REF_' . time(),
-                            'amount'           => $checkoutResponse['amount'] ?? $cartTotalAmount,
-                            'currency'         => $checkoutResponse['currency'] ?? 'AED',
-                            'status'           => $checkoutResponse['status'] ?? 'created',
-                            'checkout_response'=> $checkoutResponse, // store full JSON
+                        // 3. Update transaction with Nomod's response
+                        $transaction->update([
+                            'checkout_response' => $checkoutResponse,
+                            'status' => $checkoutResponse['status'] ?? 'created',
                         ]);
 
                         \Session::put('nomodCheckoutSessionId', $checkoutResponse['id']);
                         \Session::put('nomodCheckoutDetails', json_encode($data));
-
-                        // return redirect()->away($checkoutResponse['url']);
 
                         if ($transaction->id) {
                             return redirect()->route('nomod.processing', ['id' => $transaction->id]);
@@ -427,17 +416,15 @@ class CheckoutController extends Controller
                     ]);
                 }
 
-                \Auth::loginUsingId($user['id']);
+                BillingInfo::create([
+                    'order_id' => $order['id'],
+                    'name' => $data['first_name'],
+                    'phone' => $data['phone'],
+                    'email' => $data['email'],
+                ]);
             }
-            BillingInfo::create([
-                'order_id' => $order['id'],
-                'name' => $data['first_name'],
-                'phone' => $data['phone'],
-                'email' => $data['email'],
-            ]);
-            if(\Auth::user()){
-                Cart::where('user_id', \Auth::user()->id)->delete();
-            }
+            
+            Cart::where('user_id', \Auth::user()->id)->delete();
             \Session::forget('cart');
             return redirect()->route('front.orders.index');
 
@@ -571,102 +558,136 @@ class CheckoutController extends Controller
  
     public function nomodSuccess(Request $request)
     {
-        //  \Session::put('nomodCheckoutSessionId', $checkoutResponse['id']);
-        //  \Session::put('nomodCheckoutDetails', json_encode($data));
-
-        $userCart = Cart::where('user_id', \Auth::user()->id)->first();
-        $cart = json_decode($userCart['products'], true);
         $transactionId = $request->query('transactionId');
 
+        // 1. Find the transaction in the database
         $transaction = NomodCheckoutTransaction::find($transactionId);
         if (empty($transaction)) {
-            return response()->json(['error' => "Something went wrong"]);
+            Log::error('Nomod success: Transaction not found', ['transactionId' => $transactionId]);
+            return redirect()->route('home')->withErrors('Payment transaction not found. Please contact support.');
         }
-        
+
+        // 2. Prevent duplicate order creation (e.g. page refresh)
+        if ($transaction->status === 'completed') {
+            // Already processed — just redirect to orders
+            if ($transaction->user_id) {
+                \Auth::loginUsingId($transaction->user_id);
+            }
+            return redirect()->route('front.orders.index');
+        }
+
         Log::info('Nomod success callback hit', [
-            'user_id' => auth()->id(),
-            'nomodCheckoutSessionId' => session('nomodCheckoutSessionId'),
-            'nomodCheckoutDetails' => session('nomodCheckoutDetails'),
-            'request Data' => $request->all(),
+            'transactionId' => $transactionId,
+            'user_id' => $transaction->user_id,
+            'session_user_id' => auth()->id(),
         ]);
 
         try {
-            // $nomodCheckoutSessionId = session('nomodCheckoutSessionId');
-            // $nomodCheckoutDetails = session('nomodCheckoutDetails');
-
-            $sessionId = \Session::get('nomodCheckoutSessionId');
-            $checkoutDetails = \Session::get('nomodCheckoutDetails');
-            
-            if($sessionId) {
-                $checkoutDetails = json_decode($checkoutDetails, true);
-
-                // \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-                // $paymentResponse = \Stripe\Checkout\Session::retrieve($sessionId);
-
-                $discountDetails = \Session::get('cart_discount');
-                $discountDetails = json_decode($discountDetails, true);
-                $discountDetails['delivery_charge'] = $checkoutDetails['delivery_charge'];
-
-                $user = \Auth::user();
-                $cart = Cart::where('user_id', $user['id'])->first();
-                $products = json_decode($cart['products'], true);
-                $order = Order::create([
-                    'user_id' => $user['id'],
-                    'products' => $cart['products'],
-                    'delivery_type' => $checkoutDetails['delivery_type'],
-                    'shipping_note' => $checkoutDetails['shipping_information'] ?? "",
-                    'discount' => json_encode($discountDetails),
-                    'address' => json_encode([
-                        'address_line_1' => $checkoutDetails['address_line_1'] ?? "",
-                        'address_line_2' => $checkoutDetails['address_line_2'] ?? "",
-                        'country_id' => $checkoutDetails['country_id'] ?? "",
-                        'state_id' => $checkoutDetails['state_id'] ?? "",
-                        'city' => $checkoutDetails['city'] ?? "",
-                    ]),
-                    'delivery_charge' => $checkoutDetails['delivery_charge'],
-                    'vat' => $checkoutDetails['vat'],
-                ]);
-
-  
-                Payment::create([
-                    'user_id' => $user['id'],
-                    'order_id' => $order['id'],
-                    'txn_id' => $transactionId,
-                    'payment_type' => $checkoutDetails['payment_type'],
-                    'price' =>  $transaction->amount 
-                ]);
-
-                //--- Debit Product Stock
-                foreach ($products as $key => $value) {
-                    $variantSlug = null;
-                    if (isset($value['product']['additional_price_enable']) && $value['product']['additional_price_enable'] == '1') {
-                        $priceList = is_array($value['product']['price_list']) ? $value['product']['price_list'] : json_decode($value['product']['price_list'], true) ?? [];
-                        $selectedId = $value['selectedPriceOptionId'] ?? 0;
-                        $option = $priceList[$selectedId] ?? null;
-                        if ($option) {
-                            $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
-                        }
-                    }
-
-                    Stock::create([
-                        'product_id' => $value['product']['id'],
-                        'variant_slug' => $variantSlug,
-                        'type' => 'Debit',
-                        'qty' => $value['quantity'],
-                        'note' => 'Order #'.$order['id']
-                    ]);
-                }
-                if(\Auth::user()){
-                    Cart::where('user_id', \Auth::user()->id)->delete();
-                }
-                \Session::forget('cart');
-                \Session::forget('checkoutSessionId');
-                \Session::forget('checkoutDetails');
-                \Session::forget('cart_discount');
-                return redirect()->route('front.orders.index');
-            } else {
-                return redirect()->route('front.checkout.index');
+            // 3. Restore user from database (not session)
+            $userId = $transaction->user_id;
+            if (!$userId) {
+                Log::error('Nomod success: No user_id on transaction', ['transactionId' => $transactionId]);
+                return redirect()->route('home')->withErrors('Payment session expired. Please contact support.');
             }
+
+            // Re-authenticate the user if session was lost
+            if (!\Auth::check()) {
+                \Auth::loginUsingId($userId);
+            }
+
+            // 4. Restore checkout details and cart from database (not session)
+            $checkoutDetails = $transaction->checkout_details;
+            $products = $transaction->cart_products;
+
+            if (empty($checkoutDetails) || empty($products)) {
+                Log::error('Nomod success: Missing checkout_details or cart_products', ['transactionId' => $transactionId]);
+                return redirect()->route('home')->withErrors('Checkout data not found. Please contact support.');
+            }
+
+            // 5. Build discount details
+            $discountDetails = json_decode(\Session::get('cart_discount'), true);
+            if (empty($discountDetails) && !empty($checkoutDetails['discount_details'])) {
+                $discountDetails = $checkoutDetails['discount_details'];
+            }
+            if (!empty($discountDetails)) {
+                $discountDetails['delivery_charge'] = $checkoutDetails['delivery_charge'] ?? 0;
+            } else {
+                $discountDetails = ['delivery_charge' => $checkoutDetails['delivery_charge'] ?? 0];
+            }
+
+            // 6. Create the Order
+            $order = Order::create([
+                'user_id' => $userId,
+                'products' => json_encode($products),
+                'delivery_type' => $checkoutDetails['delivery_type'] ?? 'Delivery',
+                'shipping_note' => $checkoutDetails['shipping_information'] ?? "",
+                'discount' => json_encode($discountDetails),
+                'address' => json_encode([
+                    'address_line_1' => $checkoutDetails['address_line_1'] ?? "",
+                    'address_line_2' => $checkoutDetails['address_line_2'] ?? "",
+                    'country_id' => $checkoutDetails['country_id'] ?? "",
+                    'state_id' => $checkoutDetails['state_id'] ?? "",
+                    'city' => $checkoutDetails['city'] ?? "",
+                ]),
+                'delivery_charge' => $checkoutDetails['delivery_charge'] ?? 0,
+                'vat' => $checkoutDetails['vat'] ?? 0,
+            ]);
+
+            // 7. Create the Payment record
+            Payment::create([
+                'user_id' => $userId,
+                'order_id' => $order['id'],
+                'txn_id' => $transactionId,
+                'payment_type' => $checkoutDetails['payment_type'] ?? 'Credit Card',
+                'price' => $transaction->amount,
+            ]);
+
+            // 8. Debit Product Stock
+            foreach ($products as $key => $value) {
+                $variantSlug = null;
+                if (isset($value['product']['additional_price_enable']) && $value['product']['additional_price_enable'] == '1') {
+                    $priceList = is_array($value['product']['price_list']) ? $value['product']['price_list'] : json_decode($value['product']['price_list'], true) ?? [];
+                    $selectedId = $value['selectedPriceOptionId'] ?? 0;
+                    $option = $priceList[$selectedId] ?? null;
+                    if ($option) {
+                        $variantSlug = !empty($option['slug']) ? $option['slug'] : \Illuminate\Support\Str::slug($option['title'] ?? '', '-');
+                    }
+                }
+
+                Stock::create([
+                    'product_id' => $value['product']['id'],
+                    'variant_slug' => $variantSlug,
+                    'type' => 'Debit',
+                    'qty' => $value['quantity'],
+                    'note' => 'Order #'.$order['id'],
+                ]);
+            }
+
+            // 9. Create BillingInfo
+            BillingInfo::create([
+                'order_id' => $order['id'],
+                'name' => $checkoutDetails['first_name'] ?? '',
+                'phone' => $checkoutDetails['phone'] ?? '',
+                'email' => $checkoutDetails['email'] ?? '',
+            ]);
+
+            // 10. Mark transaction as completed to prevent duplicates
+            $transaction->update(['status' => 'completed']);
+
+            // 11. Clean up cart and session
+            Cart::where('user_id', $userId)->delete();
+            \Session::forget('cart');
+            \Session::forget('nomodCheckoutSessionId');
+            \Session::forget('nomodCheckoutDetails');
+            \Session::forget('cart_discount');
+
+            Log::info('Nomod order created successfully', [
+                'order_id' => $order['id'],
+                'user_id' => $userId,
+                'amount' => $transaction->amount,
+            ]);
+
+            return redirect()->route('front.orders.index');
 
         } catch (\Throwable $e) {
 
@@ -675,12 +696,12 @@ class CheckoutController extends Controller
                 'file'    => $e->getFile(),
                 'line'    => $e->getLine(),
                 'trace'   => substr($e->getTraceAsString(), 0, 2000),
-                'user_id' => auth()->id(),
-                'link_id' => session('nomod_link_id'),
+                'transactionId' => $transactionId,
+                'user_id' => $transaction->user_id ?? null,
             ]);
 
-            return redirect()->route('front.checkout.index')
-                ->withErrors('Something went wrong while processing payment.');
+            return redirect()->route('home')
+                ->withErrors('Something went wrong while processing payment. Please contact support.');
         }
     }
  

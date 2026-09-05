@@ -122,9 +122,17 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = Order::find($id);
-        $data->status = $request->get('status');
+        $data = Order::with('user')->find($id);
+        
+        $oldStatus = $data->status;
+        $newStatus = $request->get('status');
+        
+        $data->status = $newStatus;
         $data->save();
+
+        if ($newStatus == 'Shipped' && $oldStatus != 'Shipped' && $data->user) {
+            \Illuminate\Support\Facades\Mail::to($data->user->email)->send(new \App\Mail\OrderShipped($data));
+        }
 
         return response()->json(['code' => 200]);
     }

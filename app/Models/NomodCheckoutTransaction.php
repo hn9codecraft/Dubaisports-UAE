@@ -14,15 +14,20 @@ class NomodCheckoutTransaction extends Model
 
     // Mass assignable fields
     protected $fillable = [
+        'user_id',
         'reference_id',
         'amount',
         'currency',
         'status',
         'checkout_response',
+        'checkout_details',
+        'cart_products',
     ];
 
-    // Cast checkout_response to array automatically
+    // Cast JSON columns to array automatically
     protected $casts = [
         'checkout_response' => 'array',
+        'checkout_details' => 'array',
+        'cart_products' => 'array',
     ];
 }

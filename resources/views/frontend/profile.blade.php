@@ -74,7 +74,30 @@
                             </div>
                         </div>
                         
-                        <h4 class="mt-5 mb-4 pb-2 border-bottom fw-bold">Delivery Address</h4>
+                        <h4 class="mt-5 mb-4 pb-2 border-bottom fw-bold">Change Password</h4>
+                        <p class="text-muted small mb-3">Leave blank if you do not want to change your password.</p>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="password" class="form-label fw-semibold">New Password</label>
+                                <input type="password" class="form-control bg-light" id="password" name="password">
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label for="password_confirmation" class="form-label fw-semibold">Confirm New Password</label>
+                                <input type="password" class="form-control bg-light" id="password_confirmation" name="password_confirmation">
+                            </div>
+                        </div>
+                        
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card border border-light shadow-sm rounded p-4 mt-4">
+                    <form action="{{ route('front.customer.address.update') }}" method="POST">
+                        @csrf
+                        <h4 class="mb-4 pb-2 border-bottom fw-bold">Delivery Address</h4>
                         <p class="text-muted small mb-3">Manage your default shipping address.</p>
                         
                         <div class="row mb-3">
@@ -127,22 +150,8 @@
                             </div>
                         </div>
                         
-                        <h4 class="mt-5 mb-4 pb-2 border-bottom fw-bold">Change Password</h4>
-                        <p class="text-muted small mb-3">Leave blank if you do not want to change your password.</p>
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label for="password" class="form-label fw-semibold">New Password</label>
-                                <input type="password" class="form-control bg-light" id="password" name="password">
-                            </div>
-                            <div class="col-md-6 mt-3 mt-md-0">
-                                <label for="password_confirmation" class="form-label fw-semibold">Confirm New Password</label>
-                                <input type="password" class="form-control bg-light" id="password_confirmation" name="password_confirmation">
-                            </div>
-                        </div>
-                        
                         <div class="text-end mt-4">
-                            <button type="submit" class="btn btn-primary px-5 py-2">Update Profile</button>
+                            <button type="submit" class="btn btn-primary px-5 py-2 fw-bold">Update Address</button>
                         </div>
                     </form>
                 </div>

@@ -33,6 +33,7 @@ Route::group(['as' => 'front.', 'namespace' => 'Front',  'middleware' => []], fu
     
     Route::get('/profile', 'ProfileController@index')->name('customer.profile');
     Route::post('/profile', 'ProfileController@update')->name('customer.profile.update');
+    Route::post('/profile/address', 'ProfileController@updateAddress')->name('customer.address.update');
     
     Route::get('/quote', 'CMSPageController@getQuoteForm')->name('quote.get');
     Route::post('/quote', 'CMSPageController@storeQuoteForm')->name('quote.store');
