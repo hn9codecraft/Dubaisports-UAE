@@ -55,7 +55,7 @@
             <p>You can track your order status by visiting your account.</p>
             
             <div style="text-align: center;">
-                <a href="{{ route('front.orders.index') }}" class="btn">View My Orders</a>
+                <a href="{{ route('front.orders.index') }}" style="display: inline-block; background-color: #0d6efd; color: #ffffff !important; text-decoration: none; padding: 12px 25px; border-radius: 4px; font-weight: bold; margin-top: 20px; text-align: center;">View My Orders</a>
             </div>
         </div>
         
